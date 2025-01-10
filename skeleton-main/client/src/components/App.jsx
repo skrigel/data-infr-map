@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext } from "react";
+
 import { Outlet } from "react-router-dom";
 
 import jwt_decode from "jwt-decode";
@@ -48,9 +49,11 @@ const App = () => {
   };
 
   return (
-    <UserContext.Provider value={authContextValue}>
-      <Outlet />
-    </UserContext.Provider>
+    <>
+      <UserContext.Provider value={authContextValue}>
+        <Outlet />
+      </UserContext.Provider>
+    </>
   );
 };
 
