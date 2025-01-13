@@ -1,0 +1,33 @@
+/* Fill me in :) */
+
+h1 {
+  color: white;
+  font-size: 5em;
+  text-align: center;
+}
+
+.login-Container {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+p {
+  color: white;
+  font-size: var(--m_text);
+  text-align: center;
+}
+
+.home-Container {
+  font-size: 30px;
+  background: url("../../assets/dnb_united_states_lrg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh; /* Ensures it covers the viewport */
+}
+
+/* .home-Container {
+  padding: 2rem;
+  background-image: url("../assets/dnb_united_states_lrg.jpg");
+  background-size: cover;
+  font-size: 30px;
+  overflow: auto;
+} */
