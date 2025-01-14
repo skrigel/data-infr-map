@@ -1,28 +1,18 @@
-import React, { useState, useEffect } from "react";
-import CatHappiness from "../modules/CatHappiness";
+import React, { useEffect } from "react";
 
+import NavBar from "../modules/NavBar";
 import "../../utilities.css";
 import "./Profile.css";
 
 const Profile = () => {
-  const [catHappiness, setCatHappiness] = useState(0);
-
-  useEffect(() => {
-    document.title = "Profile Page";
-  }, []);
-
-  const incrementCatHappiness = () => {
-    setCatHappiness(catHappiness + 1);
-  };
+  // useEffect(() => {
+  //   document.title = "Profile Page";
+  // }, []);
 
   return (
     <>
-      <div
-        className="Profile-avatarContainer"
-        onClick={() => {
-          incrementCatHappiness();
-        }}
-      >
+      <NavBar></NavBar>
+      <div className="Profile-avatarContainer">
         <div className="Profile-avatar" />
       </div>
       <h1 className="Profile-name u-textCenter">Shannen Wu</h1>
@@ -33,10 +23,6 @@ const Profile = () => {
           <div id="profile-description">
             I am really allergic to cats i don't know why i have a catbook
           </div>
-        </div>
-        <div className="Profile-subContainer u-textCenter">
-          <h4 className="Profile-subTitle">Cat Happiness</h4>
-          <CatHappiness catHappiness={catHappiness} />
         </div>
         <div className="Profile-subContainer u-textCenter">
           <h4 className="Profile-subTitle">My Favorite Type of Cat</h4>
