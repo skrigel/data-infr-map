@@ -18,16 +18,15 @@ p {
 }
 
 .home-Container {
-  font-size: 30px;
   background: url("../../assets/dnb_united_states_lrg.jpg") no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh; /* Ensures it covers the viewport */
 }
 
-/* .home-Container {
-  padding: 2rem;
-  background-image: url("../assets/dnb_united_states_lrg.jpg");
-  background-size: cover;
+.home-text {
   font-size: 30px;
-  overflow: auto;
-} */
+}
+
+.link-text {
+  font-size: 2em;
+}

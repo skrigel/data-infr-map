@@ -5,9 +5,9 @@ import "../../utilities.css";
 import "./Profile.css";
 
 const Profile = () => {
-  // useEffect(() => {
-  //   document.title = "Profile Page";
-  // }, []);
+  useEffect(() => {
+    document.title = "Profile Page";
+  }, []);
 
   return (
     <>

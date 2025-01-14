@@ -1,48 +1,24 @@
 import React, { useContext } from "react";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { Link } from "react-router-dom";
 
 import "../../utilities.css";
 import "./Home.css";
-import { UserContext } from "../App";
 import Footer from "../modules/Footer";
 import NavBar from "../modules/NavBar";
-
-const Login = () => {
-  const { userId, handleLogin, handleLogout } = useContext(UserContext);
-  return (
-    <>
-      {userId ? (
-        <button
-          onClick={() => {
-            googleLogout();
-            handleLogout();
-          }}
-        >
-          Logout
-        </button>
-      ) : (
-        <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
-      )}
-    </>
-  );
-};
 
 const Home = () => {
   return (
     <div className="home-Container">
-      <div className="u-textCenter">
-        <Login></Login>
-      </div>
-
       <NavBar />
-      <h1>Data Center Mapping</h1>
-      <p>Explore data centers in Massachusetts!</p>
-      <hr></hr>
-      <div className="u-textCenter">
-        <Link to="/map" className="u-link">
-          Go to map
-        </Link>
+      <div className="home-text">
+        <h1>Data Center Mapping</h1>
+        <p>Explore data centers in Massachusetts!</p>
+        <hr></hr>
+        <div className="u-textCenter">
+          <Link to="/map" className="u-link">
+            Go to map
+          </Link>
+        </div>
       </div>
       <Footer />
     </div>
