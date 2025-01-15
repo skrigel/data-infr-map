@@ -1,0 +1,31 @@
+.Panel-container {
+  padding: var(--s) var(--m);
+  background-color: grey;
+  display: flex;
+}
+
+.Panel-title {
+  color: var(--white);
+  font-size: 20px;
+}
+/*
+.Panel-buttonContainer {
+  margin-left: var(--l);
+} */
+
+.Panel-textContainer {
+  /* margin-left: 100; */
+  color: black;
+  align-items: center;
+}
+
+.Panel-link,
+.NavBar-link:visited {
+  color: var(--white);
+  opacity: 0.6;
+  text-decoration: none;
+}
+
+.Panel-link:hover {
+  opacity: 0.8;
+}
