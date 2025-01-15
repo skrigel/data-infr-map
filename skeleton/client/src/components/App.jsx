@@ -34,10 +34,12 @@ const App = () => {
     post("/api/login", { token: userToken }).then((user) => {
       setUserId(user._id);
       post("/api/initsocket", { socketid: socket.id });
+      console.log(user);
     });
   };
 
   const handleLogout = () => {
+    console.log("Logged out successfully!");
     setUserId(undefined);
     post("/api/logout");
   };

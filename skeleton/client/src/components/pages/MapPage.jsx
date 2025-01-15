@@ -20,8 +20,8 @@ const Map = () => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11", // Mapbox style URL
-      center: [-98.5795, 39.8283], // Center of the United States
+      style: "mapbox://styles/skrigel/cm5wnzuqw00ly01s3a91ieup2", // Mapbox style URL
+      center: [42.068, 71.256], // Center of the United States
       zoom: 4,
     });
   }, []);

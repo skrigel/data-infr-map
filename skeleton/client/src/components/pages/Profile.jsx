@@ -1,13 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useParams, useContext } from "react";
 
 import NavBar from "../modules/NavBar";
 import "../../utilities.css";
 import "./Profile.css";
 
+import { get, post } from "../../utilities";
+import { UserContext } from "../App";
+
 const Profile = () => {
+  const { userId, handleLogin, handleLogout } = useContext(UserContext);
+
   useEffect(() => {
     document.title = "Profile Page";
   }, []);
+
+  //init to nul
+  const [user, setUser] = useState(null);
+
+  let userid = userId;
+
+  useEffect(() => {
+    get("api/user", { userid: userid }).then((user) => {
+      setUser(user);
+    });
+  });
 
   return (
     <>
@@ -15,7 +31,7 @@ const Profile = () => {
       <div className="Profile-avatarContainer">
         <div className="Profile-avatar" />
       </div>
-      <h1 className="Profile-name u-textCenter">Shannen Wu</h1>
+      {!user ? <div>Loading!</div> : <h1 className="Profile-name u-textCenter">{user.name}</h1>}
       <hr className="Profile-line" />
       <div className="u-flex">
         <div className="Profile-subContainer u-textCenter">

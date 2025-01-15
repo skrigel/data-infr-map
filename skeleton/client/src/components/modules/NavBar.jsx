@@ -28,6 +28,7 @@ const Login = () => {
 };
 
 const NavBar = () => {
+  const { userId, handleLogin, handleLogout } = useContext(UserContext);
   return (
     <>
       <nav className="NavBar-container">
@@ -40,9 +41,11 @@ const NavBar = () => {
           <Link to="/map" className="NavBar-link">
             Map
           </Link>
-          <Link to="/profile" className="NavBar-link">
-            Profile
-          </Link>
+          {userId && (
+            <Link to={`/profile`} className="NavBar-link u-inlineBlock">
+              Profile
+            </Link>
+          )}
         </div>
       </nav>
       <div className="NavBar-loginContainer">
