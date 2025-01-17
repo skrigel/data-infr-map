@@ -15,6 +15,7 @@ import {
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Profile from "./components/pages/Profile";
+import mapboxgl from "mapbox-gl";
 
 //TODO: REPLACE WITH YOUR OWN CLIENT_ID
 const GOOGLE_CLIENT_ID = "20588114788-2l1obpaoi0h8tub8s0dbeki5krtof5rl.apps.googleusercontent.com";

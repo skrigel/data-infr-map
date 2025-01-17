@@ -29,6 +29,7 @@ const Login = () => {
 
 const NavBar = () => {
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
+  console.log("nav user id", userId);
   return (
     <>
       <nav className="NavBar-container">

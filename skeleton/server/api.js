@@ -11,7 +11,8 @@ const express = require("express");
 
 // import models so we can interact with the database
 const User = require("./models/user");
-
+const Facilities = require("./models/facilities");
+// const Facility = require("./models/facility");
 // import authentication library
 const auth = require("./auth");
 
@@ -52,6 +53,51 @@ router.get("/user", (req, res) => {
       res.status(500).send("User Not");
     });
 });
+
+// API endpoint to fetch facilities data
+
+router.get("/facilities", (req, res) => {
+  Facilities.find({})
+    .then((allPoints) => {
+      // Map the data to a GeoJSON FeatureCollection
+      console.log(allPoints[0]);
+      const geoJSON = {
+        type: "FeatureCollection",
+        features: allPoints.map((point) => ({
+          type: "Feature",
+          properties: {
+            name: point.properties.name,
+            company: point.properties.company,
+            type: point.properties.type,
+            address: point.properties.address,
+            locality: point.properties.locality,
+            county: point.properties.county,
+            state: point.properties.state,
+            country: point.properties.country,
+            zip: point.properties.zip,
+          },
+          geometry: {
+            type: point.geometry.type,
+            coordinates: point.geometry.coordinates,
+          },
+        })),
+      };
+      console.log("not good");
+      res.send(geoJSON);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send({ error: "Failed to fetch facilities" });
+    });
+});
+
+// app.get('/api/point', (req, res) => {
+// write some code to user the coords to find the name and then return the id to
+//   Facility.find({name: req.query.name}).then((facilityObj)=>{
+//     res.send(facilityObj);
+//   })
+
+// });
 
 // router.post("/user", auth.ensureLoggedIn, (req, res) => {
 //   console.log(`Received a chat message from ${req.user.name}: ${req.body.content}`);
