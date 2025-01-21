@@ -24,33 +24,123 @@
   border-radius: 4px;
 }
 
-.sidebar-left {
+.sidebar-bottom {
   background-color: rgba(35, 55, 75, 0.9);
   color: #fff;
-  height: 70%;
-  width: 300px; /* Optional: Adjust the width as needed */
+  height: 40%;
+  width: 300px;
   font-family: monospace;
   z-index: 1;
   position: absolute;
-  top: 50%; /* Position the top edge in the middle */
-  left: 15%; /* Position the left edge in the middle */
-  transform: translate(-50%, -50%); /* Center the panel */
+  top: 75%;
+  left: 15%;
+  transform: translate(-50%, -50%);
   border-radius: 4px;
-  padding: 20px; /* Optional: Add some padding for better layout */
+  padding: 20px;
+}
+.sidebar-top {
+  background-color: rgba(35, 55, 75, 0.9);
+  color: #fff;
+  height: 30%;
+  width: 300px;
+  font-family: monospace;
+  z-index: 1;
+  position: absolute;
+  top: 30%;
+  align-items: center;
+  left: 15%;
+  transform: translate(-50%, -50%);
+  border-radius: 4px;
+  padding: 20px;
 }
 
-/* .sidebar-left {
-  background-color: rgb(35 55 75 / 90%);
-  color: #fff;
-  height: 80%;
-  padding: 80px 40px;
-  font-family: monospace;
-  z-index: 1;
-  position: absolute;
-  bottom: 0;
-  margin-left: 20;
+.panel-container {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */ /* Center the items horizontally */
+  gap: 20px; /* Optional: Adjust the space between the panels */
+  padding: 20px;
+  position: relative; /* Positioning context for absolute elements if needed */
+}
+
+.sidebar-top h3 {
+  text-align: center;
+  font-size: 18px;
+}
+
+.sidebar-top p {
+  text-align: left;
+}
+
+.sidebar-top button:hover {
+  background-color: #0056b3;
+}
+
+.sidebar-bottom h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.sidebar-bottom .close-button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px;
+  border: none;
   border-radius: 4px;
-} */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-bottom .close-button:hover {
+  background-color: #0056b3;
+}
+
+.sidebar-bottom table {
+  width: 100%; /* Make the table fit the container width */
+  border-collapse: collapse;
+  overflow-x: scroll;
+  border-radius: 4px; /* Match the border radius of the panel */
+  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+}
+
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-bottom .close-button {
+  z-index: 2; /* Ensure the button stays on top of the table */
+}
+
+.sidebar-bottom th,
+.sidebar-bottom td {
+  border: 1px solid #ddd; /* Light border for cells */
+  padding: 8px; /* Padding for better readability */
+  color: #fff; /* Match text color with sidebar theme */
+  text-align: left;
+}
+
+.sidebar-bottom th {
+  background-color: rgba(255, 255, 255, 0.2); /* Distinct background for header */
+  font-weight: bold;
+}
+
+.sidebar-bottom thead {
+  display: table; /* Keep the header fixed */
+  width: 100%;
+}
+
+.sidebar-bottom tbody tr {
+  display: table; /* Make rows behave like table rows */
+  width: 100%;
+}
+
+.sidebar-bottom td {
+  word-wrap: break-word; /* Ensure text wraps inside cells */
+}
 
 .reset-button {
   display: block;
@@ -83,8 +173,8 @@
   cursor: pointer;
 }
 
-popup-panel {
-  /* display: none; Hide by default */
+/* popup-panel {
+
   position: fixed;
   top: 50%;
   left: 50%;
@@ -97,7 +187,7 @@ popup-panel {
 }
 
 .popup-panel.active {
-  display: block; /* Show when active */
+  display: block;
 }
 
 .popup-inner {
@@ -113,4 +203,4 @@ popup-panel {
   top: 16px;
   right: 16px;
   color: grey;
-}
+} */

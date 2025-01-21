@@ -47,6 +47,16 @@ export function get(endpoint, params = {}) {
     });
 }
 
+export function get_census(endpoint) {
+  const fullPath = endpoint;
+  return fetch(fullPath)
+    .then(convertToJSON)
+    .catch((error) => {
+      // give a useful error message
+      throw `GET request to ${fullPath} failed with error:\n${error}`;
+    });
+}
+
 // Helper code to make a post request. Default parameter of empty JSON Object for params.
 // Returns a Promise to a JSON Object.
 export function post(endpoint, params = {}) {

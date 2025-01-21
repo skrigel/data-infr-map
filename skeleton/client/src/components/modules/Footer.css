@@ -4,12 +4,16 @@
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: var(--primary);
+  padding-top: 10px;
+  background-color: var(--primary--dim);
+  z-index: 3;
 }
 
 .Footer-text {
   color: var(--white);
   font-size: 20px;
+  margin-bottom: 5px;
+  margin-left: 5px;
 }
 
 /* .NavBar-linkContainer {

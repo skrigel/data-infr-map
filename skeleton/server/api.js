@@ -13,6 +13,7 @@ const express = require("express");
 const User = require("./models/user");
 const Facilities = require("./models/facilities");
 const Tracts = require("./models/tracts");
+const Counties = require("./models/counties");
 // const Facility = require("./models/facility");
 // import authentication library
 const auth = require("./auth");
@@ -122,6 +123,104 @@ router.get("/census_tracts", (req, res) => {
       res.status(500).send({ error: "Failed to fetch tracts" });
     });
 });
+
+router.get("/census_counties", (req, res) => {
+  Counties.find({})
+    .then((allPoly) => {
+      // Map the data to a GeoJSON FeatureCollection
+      // console.log(allPoints[0]);
+      const geoJSON = {
+        type: "FeatureCollection",
+        features: allPoly.map((poly) => ({
+          type: "Feature",
+          properties: {
+            COUNTYNS: poly.properties.COUNTYNS,
+            GEOID: poly.properties.GEOID,
+            GEOIDFQ: poly.properties.GEOIDFQ,
+            COUNTY: poly.properties.NAMELSAD,
+            CLASSFP: poly.properties.CLASSFP,
+            FUNCSTAT: poly.properties.FUNCSTAT,
+            ALAND: poly.properties.ALAND,
+            // AWATER: poly.properties.AWATER,
+          },
+          geometry: {
+            type: poly.geometry.type,
+            coordinates: poly.geometry.coordinates,
+          },
+        })),
+      };
+      res.send(geoJSON);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send({ error: "Failed to fetch tracts" });
+    });
+});
+
+router.get("/census_counties", (req, res) => {
+  Counties.find({})
+    .then((allPoly) => {
+      // Map the data to a GeoJSON FeatureCollection
+      // console.log(allPoints[0]);
+      const geoJSON = {
+        type: "FeatureCollection",
+        features: allPoly.map((poly) => ({
+          type: "Feature",
+          properties: {
+            COUNTYNS: poly.properties.COUNTYNS,
+            GEOID: poly.properties.GEOID,
+            GEOIDFQ: poly.properties.GEOIDFQ,
+            COUNTY: poly.properties.NAMELSAD,
+            CLASSFP: poly.properties.CLASSFP,
+            FUNCSTAT: poly.properties.FUNCSTAT,
+            ALAND: poly.properties.ALAND,
+            // AWATER: poly.properties.AWATER,
+          },
+          geometry: {
+            type: poly.geometry.type,
+            coordinates: poly.geometry.coordinates,
+          },
+        })),
+      };
+      res.send(geoJSON);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send({ error: "Failed to fetch tracts" });
+    });
+});
+
+// router.get("/proxy", async (req, res) => {
+//   try {
+//     const { apiUrl } = req.query;
+
+//     if (!apiUrl) {
+//       return res.status(400).json({ error: "Missing 'apiUrl' parameter." });
+//     }
+
+//     // Validate the base URL to allow only Census API requests
+//     if (!apiUrl.startsWith("https://api.census.gov/")) {
+//       return res.status(400).json({ error: "Invalid API URL. Only Census API URLs are allowed." });
+//     }
+
+//     // Add the API key if it's missing
+//     const apiKey = process.env.CENSUS_API_KEY;
+//     const apiUrlWithKey = apiUrl.includes("key=") ? apiUrl : `${apiUrl}&key=${apiKey}`;
+
+//     // Fetch data from the provided URL
+//     const response = await fetch(apiUrlWithKey, { redirect: "manual" });
+
+//     if (response.status === 302) {
+//       return res.status(500).json({ error: "Redirect detected. Check your API key or query." });
+//     }
+
+//     const data = await response.json();
+//     return res.status(200).json(data);
+//   } catch (error) {
+//     console.error("Error in proxy request:", error);
+//     res.status(500).json({ error: "Failed to fetch data." });
+//   }
+// });
 
 // app.get('/api/point', (req, res) => {
 // write some code to user the coords to find the name and then return the id to
