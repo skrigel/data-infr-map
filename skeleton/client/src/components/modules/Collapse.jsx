@@ -46,24 +46,6 @@ const Collapsible = ({ isOpen, onClick, title }) => {
         </div>
       </div>
     </>
-
-    // <>
-
-    //   <div className="card">
-    //     <div>
-    //       <div className="d-flex justify-content-between">
-    //         <h6 className="font-weight-bold">{title}</h6>
-    //         <button type="button" className="med-btn" onClick={onClick}>
-    //           {!isOpen ? <div>Close</div> : <div>Open</div>}
-    //         </button>
-    //       </div>
-    //     </div>
-
-    //     <div className="border-bottom">
-    //       <div>{isOpen && <div>-----</div>}</div>
-    //     </div>
-    //   </div>
-    // </>
   );
 };
 

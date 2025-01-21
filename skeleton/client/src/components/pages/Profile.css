@@ -32,11 +32,15 @@
 }
 
 .Profile-name {
-  color: black;
-  font-size: 40px;
+  color: lightgray;
+  font-size: 50px;
   font-weight: 300;
+  padding-bottom: 30px;
 }
 
+.Profile-name:hover {
+  color: var(--primary);
+}
 .Profile-line {
   border-color: var(--grey);
 }

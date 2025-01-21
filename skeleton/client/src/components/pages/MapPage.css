@@ -1,0 +1,116 @@
+.mapboxgl-popup-content {
+  min-width: 200px;
+}
+/*Map styles*/
+
+#map-container {
+  height: 100%;
+  width: 50%;
+
+  /* temporarily set the background color so we can tell where the map container is positioned */
+  background-color: lightgrey;
+}
+
+.sidebar {
+  background-color: rgb(35 55 75 / 90%);
+  color: #fff;
+  padding: 6px 12px;
+  font-family: monospace;
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 12px;
+  border-radius: 4px;
+}
+
+.sidebar-left {
+  background-color: rgba(35, 55, 75, 0.9);
+  color: #fff;
+  height: 70%;
+  width: 300px; /* Optional: Adjust the width as needed */
+  font-family: monospace;
+  z-index: 1;
+  position: absolute;
+  top: 50%; /* Position the top edge in the middle */
+  left: 15%; /* Position the left edge in the middle */
+  transform: translate(-50%, -50%); /* Center the panel */
+  border-radius: 4px;
+  padding: 20px; /* Optional: Add some padding for better layout */
+}
+
+/* .sidebar-left {
+  background-color: rgb(35 55 75 / 90%);
+  color: #fff;
+  height: 80%;
+  padding: 80px 40px;
+  font-family: monospace;
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  margin-left: 20;
+  border-radius: 4px;
+} */
+
+.reset-button {
+  display: block;
+  position: absolute;
+  bottom: 70px;
+  z-index: 1;
+  right: 15px;
+  padding: 4px 10px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.zoom-in-button {
+  position: absolute;
+  bottom: 140px;
+  z-index: 1;
+  right: 15px;
+  padding: 4px 10px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.zoom-out-button {
+  position: absolute;
+  bottom: 110px;
+  z-index: 1;
+  right: 15px;
+  padding: 4px 10px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+popup-panel {
+  /* display: none; Hide by default */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popup-panel.active {
+  display: block; /* Show when active */
+}
+
+.popup-inner {
+  position: relative;
+  padding: 32px;
+  width: 100%;
+  max-width: 320px;
+  background-color: white;
+}
+
+.popup-inner .close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  color: grey;
+}

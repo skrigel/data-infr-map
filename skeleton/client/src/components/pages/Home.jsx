@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "../../utilities.css";
@@ -9,17 +9,35 @@ import NavBar from "../modules/NavBar";
 const Home = () => {
   return (
     <div className="home-Container">
-      <NavBar />
-      <div className="home-text">
-        <h1>Data Center Mapping</h1>
-        <p>Explore data centers in Massachusetts!</p>
-        <hr></hr>
-        <div className="u-textCenter">
-          <Link to="/map" className="u-link">
-            Go to map
-          </Link>
+      <ul class="background">
+        <NavBar></NavBar>
+        <div className="home-text">
+          <h1 className="home-header">Data Center Mapping</h1>
+          <p>Explore data centers in Massachusetts!</p>
+          <hr></hr>
+          <div className="u-textCenter">
+            <Link to="/map" className="u-link">
+              Go to map
+            </Link>
+          </div>
         </div>
-      </div>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+
       <Footer />
     </div>
   );

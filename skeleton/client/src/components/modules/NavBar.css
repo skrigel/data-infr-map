@@ -5,6 +5,44 @@
 } */
 
 .NavBar-container {
+  display: flex; /* Use Flexbox for layout */
+  justify-content: flex-start; /* Align items to the left */
+  align-items: center; /* Vertically align items */
+  padding: var(--s) var(--m);
+  background-color: var(--primary);
+}
+
+.NavBar-title {
+  color: var(--white);
+  font-size: 20px;
+}
+
+.NavBar-linkContainer {
+  padding: var(--s) var(--m);
+  display: flex; /* Display links inline */
+  gap: var(--s); /* Adjust spacing between individual links */
+}
+
+.NavBar-link,
+.NavBar-link:visited {
+  color: var(--white);
+  opacity: 0.6;
+  text-decoration: none;
+}
+
+/* .NavBar-linkContainer {
+  margin-left: var(--l);
+  display: flex;
+  gap: var(--m);
+} */
+.NavBar-loginContainer {
+  margin-left: auto; /* Push the login button to the far right */
+  display: flex; /* Ensure proper alignment */
+  align-items: center;
+  gap: 10px; /* Add spacing if needed between items in the container */
+}
+
+/* .NavBar-container {
   padding: var(--s) var(--m);
   background-color: var(--primary);
 }
@@ -19,9 +57,9 @@
 }
 
 .NavBar-loginContainer {
-  margin-left: 100;
+  padding-left: 40;
   align-items: center;
-}
+} */
 
 .NavBar-link,
 .NavBar-link:visited {
@@ -34,10 +72,10 @@
   opacity: 0.8;
 }
 
-/* .NavBar-link.NavBar-login {
+.NavBar-link.NavBar-login {
   opacity: 1;
   color: black;
-} */
+}
 
 .NavBar-link + .NavBar-link {
   margin-left: var(--m);

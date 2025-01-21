@@ -12,6 +12,7 @@ const express = require("express");
 // import models so we can interact with the database
 const User = require("./models/user");
 const Facilities = require("./models/facilities");
+const Tracts = require("./models/tracts");
 // const Facility = require("./models/facility");
 // import authentication library
 const auth = require("./auth");
@@ -60,7 +61,7 @@ router.get("/facilities", (req, res) => {
   Facilities.find({})
     .then((allPoints) => {
       // Map the data to a GeoJSON FeatureCollection
-      console.log(allPoints[0]);
+      // console.log(allPoints[0]);
       const geoJSON = {
         type: "FeatureCollection",
         features: allPoints.map((point) => ({
@@ -82,12 +83,43 @@ router.get("/facilities", (req, res) => {
           },
         })),
       };
-      console.log("not good");
       res.send(geoJSON);
     })
     .catch((err) => {
       console.error(err);
       res.status(500).send({ error: "Failed to fetch facilities" });
+    });
+});
+
+//get census tracts data
+
+router.get("/census_tracts", (req, res) => {
+  Tracts.find({})
+    .then((allPoly) => {
+      // Map the data to a GeoJSON FeatureCollection
+      // console.log(allPoints[0]);
+      const geoJSON = {
+        type: "FeatureCollection",
+        features: allPoly.map((poly) => ({
+          type: "Feature",
+          properties: {
+            GEOID: poly.properties.GEOID,
+            NAME: poly.properties.NAMELSAD,
+            ALAND: poly.properties.ALAND,
+            AWATER: poly.properties.AWATER,
+            CENSIS_TRACT: poly.properties.CENSUS_TRACT,
+          },
+          geometry: {
+            type: poly.geometry.type,
+            coordinates: poly.geometry.coordinates,
+          },
+        })),
+      };
+      res.send(geoJSON);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send({ error: "Failed to fetch tracts" });
     });
 });
 

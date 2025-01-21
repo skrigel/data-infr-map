@@ -4,6 +4,8 @@ import App from "./components/App";
 import Home from "./components/pages/Home";
 import MapPage from "./components/pages/MapPage";
 import NotFound from "./components/pages/NotFound";
+import mapboxgl from "mapbox-gl";
+
 // import Profile from "./components/pages/Profile";
 
 import {
@@ -15,7 +17,7 @@ import {
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Profile from "./components/pages/Profile";
-import mapboxgl from "mapbox-gl";
+import Sidebar from "./components/modules/Sidebar";
 
 //TODO: REPLACE WITH YOUR OWN CLIENT_ID
 const GOOGLE_CLIENT_ID = "20588114788-2l1obpaoi0h8tub8s0dbeki5krtof5rl.apps.googleusercontent.com";
@@ -26,6 +28,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<Home />} />
       <Route path="/map" element={<MapPage />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/sidebar" element={<Sidebar />} />
     </Route>
   )
 );

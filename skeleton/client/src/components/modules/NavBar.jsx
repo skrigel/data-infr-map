@@ -1,11 +1,14 @@
 import "./NavBar.css";
+
 import { Link } from "react-router-dom";
 
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 
 import "../../utilities.css";
 import { UserContext } from "../App";
+// import Sidebar from "./Sidebar";
+// import { IconButton, Box } from "@mui/material";
 
 const Login = () => {
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
@@ -13,6 +16,7 @@ const Login = () => {
     <>
       {userId ? (
         <button
+          className="medium-btn"
           onClick={() => {
             googleLogout();
             handleLogout();
@@ -29,13 +33,13 @@ const Login = () => {
 
 const NavBar = () => {
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
-  console.log("nav user id", userId);
+
   return (
     <>
       <nav className="NavBar-container">
         <div className="NavBar-title u-inlineBlock">DC MAPPER</div>
 
-        <div className="NavBar-linkContainer u-inlineBlock">
+        <div className="NavBar-linkContainer u-text-Center">
           <Link to="/" className="NavBar-link">
             Home
           </Link>
@@ -48,10 +52,8 @@ const NavBar = () => {
             </Link>
           )}
         </div>
+        <Login className="NavBar-loginContainer"></Login>
       </nav>
-      <div className="NavBar-loginContainer">
-        <Login></Login>
-      </div>
     </>
   );
 };
