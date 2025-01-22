@@ -15,9 +15,10 @@ const PopupPanel = ({ selPoint, setSelPoint, setDemoPanelOpen }) => {
         <p>Address: {selPoint.address + ", " + selPoint.locality}</p>
         <br></br>
         <p>Company: {selPoint.company}</p>
-        <hr></hr>
+        <br></br>
+        <p>Type: {selPoint.type}</p>
         <button onClick={() => setDemoPanelOpen(true)} className="view-more-button">
-          View More Info
+          View Regional Information
         </button>
       </div>
     </div>

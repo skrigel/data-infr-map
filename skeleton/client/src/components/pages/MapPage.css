@@ -9,35 +9,66 @@
 
   /* temporarily set the background color so we can tell where the map container is positioned */
   background-color: lightgrey;
+  color: black;
 }
 
 .sidebar {
+  position: absolute;
+  bottom: 50px;
+  z-index: 1;
+  right: 15px;
+  padding: 4px 10px;
+  border-radius: 15px;
+  cursor: pointer;
   background-color: rgb(35 55 75 / 90%);
   color: #fff;
   padding: 6px 12px;
   font-family: monospace;
-  z-index: 1;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 12px;
-  border-radius: 4px;
+  z-index: 3;
+}
+
+.sidebar-table {
+  flex: 5; /* Table takes two parts of the available space */
+  margin-left: 20px; /* Add spacing between buttons and table */
+  overflow-x: auto;
 }
 
 .sidebar-bottom {
   background-color: rgba(35, 55, 75, 0.9);
   color: #fff;
   height: 40%;
-  width: 300px;
+  width: 800px;
   font-family: monospace;
   z-index: 1;
   position: absolute;
   top: 75%;
-  left: 15%;
+  left: 30%;
   transform: translate(-50%, -50%);
   border-radius: 4px;
   padding: 20px;
+  display: flex;
 }
+
+.sidebar-buttons {
+  flex: 1; /* Buttons take one part of the available space */
+  align-items: left;
+  gap: 10px; /* Add spacing between buttons */
+}
+
+.sidebar-buttons button {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.sidebar-buttons button:hover {
+  background-color: #777;
+}
+
 .sidebar-top {
   background-color: rgba(35, 55, 75, 0.9);
   color: #fff;
@@ -145,10 +176,10 @@
 .reset-button {
   display: block;
   position: absolute;
-  bottom: 70px;
+  bottom: 90px;
   z-index: 1;
   right: 15px;
-  padding: 4px 10px;
+  padding: 10px 10px;
   border-radius: 15px;
   cursor: pointer;
 }

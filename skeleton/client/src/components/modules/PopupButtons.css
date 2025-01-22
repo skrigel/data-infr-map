@@ -1,0 +1,20 @@
+.sidebar-buttons {
+  flex: 1; /* Buttons take one part of the available space */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Add spacing between buttons */
+}
+
+.sidebar-buttons button {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.sidebar-buttons button:hover {
+  background-color: #777;
+}

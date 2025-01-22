@@ -2,14 +2,22 @@
   padding: 0 35%;
 }
 
+/* .profile-pic {
+  border-radius: 50%;
+  scale: 60%;
+  background-color: white;
+} */
+
 .Profile-avatar {
   /* make it responsive */
+  scale: 60%;
+  background-color: white;
   max-width: 100%;
   width: 100%;
   height: auto;
   display: block;
   /* div height to be the same as width*/
-  padding-top: 100%;
+  /* padding-top: 100%; */
 
   /* make it a circle */
   border-radius: 50%;
@@ -39,7 +47,7 @@
 }
 
 .Profile-name:hover {
-  color: var(--primary);
+  color: var(--primary-dim);
 }
 .Profile-line {
   border-color: var(--grey);
@@ -56,6 +64,6 @@
 
 .Profile-subTitle {
   font-weight: 300;
-  font-size: 24px;
+  font-size: 40px;
   margin: var(--m) var(--s);
 }

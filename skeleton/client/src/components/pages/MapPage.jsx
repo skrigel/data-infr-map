@@ -1,7 +1,6 @@
 import "./MapPage.css";
 import NavBar from "../modules/NavBar";
 import Footer from "../modules/Footer";
-import ReactDOM from "react-dom";
 import CensusDataTable from "../modules/CensusDataTable";
 import React, { Component, useRef, useEffect, useState } from "react";
 
@@ -13,6 +12,7 @@ import { get, post, get_census } from "../../utilities";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import PopupPanel from "../modules/PopupPanel";
+import PopupButtons from "../modules/PopupButtons";
 
 const INITIAL_CENTER = [-71.057083, 42.361145];
 const INITIAL_ZOOM = 10.12;
@@ -24,39 +24,124 @@ const MAP_BOUNDS = new mapboxgl.LngLatBounds(
 const CENSUS_API_KEY = "af2cf73162a5d8a466c8918ebfc397716c84093c";
 
 const demoTypeToFields = {
-  age_and_sex: ["B01003_001E"],
+  sex_citizenship: [
+    "B05003_001E",
+    "B05003_002E",
+    "B05003_013E",
+    "B05002_026E",
+    "B16008_020E",
+    "B05007_027E",
+    "B05007_014E",
+    "B05007_040E",
+    "B05007_094E",
+  ],
+  family_households: [
+    "B05009_002E",
+    "B05009_020E",
+    "B05003_014E",
+    "B05003_003E",
+    "B05010_019E",
+    "B05010_023E",
+    "B07008_002E",
+    "B07008_003E",
+    "B07008_004E",
+    "B11001_002E",
+    "B11001_007E",
+    "B11001_008E",
+  ],
+  income_poverty: [
+    "B06010_003E",
+    "B06010_002E",
+    "B19013_001E",
+    "B06010_004E",
+    "B06010_005E",
+    "B06010_006E",
+    "B06010_007E",
+    "B06010_009E",
+    "B06010_010E",
+    "B06010_011E",
+    "B19001_014E",
+    "B19001_015E",
+    "B19001_016E",
+    "B19001_017E",
+    "B17001_003E",
+    "B17001_017E",
+  ],
+  education: [
+    "B15002_010E",
+    "B15002_011E",
+    "B15002_014E",
+    "B15002_015E",
+    "B15002_016E",
+    "B15002_018E",
+    "B15002_028E",
+    "B15002_028E",
+    "B15002_031E",
+    "B15002_032E",
+    "B15002_033E",
+    "B15002_035E",
+    "B15012_009E",
+    "B15012_010E",
+    "B15012_012E",
+    "B15012_013E",
+    "B15012_014E",
+    "B14003_031E",
+    "B14003_040E",
+    "B14003_003E",
+    "B14003_012E",
+  ],
+  computer_internet: [
+    "B28001_002E",
+    "B28001_005E",
+    "B28003_002E",
+    "B28001_003E",
+    "B28001_011E",
+    "B28002_002E",
+    "B28002_005E",
+    "B28002_005E",
+    "B28002_013E",
+    "B28002_013E",
+    "B28002_009E",
+  ],
+  labor: [
+    "B23025_002E",
+    "B23025_004E",
+    "B23025_005E",
+    "B23025_007E",
+    "B20005_050E",
+    "B20005_003E",
+    "B23022_004E",
+    "B23022_028E",
+    "B20005_050E",
+    "B20005_003E",
+    "B08526_002E",
+    "B08526_003E",
+    "B08526_004E",
+    "B08526_006E",
+    "B08526_007E",
+    "B08526_008E",
+    "B08526_009E",
+    "B08526_010E",
+    "B08526_011E",
+    "B08526_012E",
+    "B08526_014E",
+  ],
 };
+const demoTypes = [
+  "sex_citizenship",
+  "income_poverty",
+  "education",
+  "computer_internet",
+  "family_households",
+  "labor",
+];
 
-// "S0101_C01_032E",
-// "S0101_C01_033E",
-// "S0101_C01_027E",
-// "S0101_C01_022E",
-// "S0101_C01_030E",
-// "S0101_C06_033EA",
-// "S0101_C01_023E",
-// "S0101_C05_001E",
-// "S0101_C03_001E",
-// "S0101_C01_001EA",
 const year = "2023";
 const survey = "acs/acs5";
 
+//Please ignore that I put this here and not in .env --> I'm sorry
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic2tyaWdlbCIsImEiOiJjbTVzdnNkZnQwcmd1Mmxwd2Q4czcxN2h3In0.eEbeS03iSXZwe-_3bzi8Vg";
-
-// const Popup = ({ routeName, routeNumber, city, type }) => (
-//   <div className="popup">
-//     <h3 className="loc-name">{routeName}</h3>
-//     <div className="loc-metric-row">
-//       <h4 className="row-title">Route #</h4>
-//       <div className="row-value">{routeNumber}</div>
-//     </div>
-//     <div className="loc-metric-row">
-//       <h4 className="row-title">Route Type</h4>
-//       <div className="row-value">{type}</div>
-//     </div>
-//     <p className="loc-city">Serves {city}</p>
-//   </div>
-// );
 
 const Map = () => {
   const mapContainer = useRef(null);
@@ -64,7 +149,7 @@ const Map = () => {
   const map = useRef(null);
 
   //for updating type of data from census API
-  const [demoType, setDemoType] = useState("age_and_sex");
+  const [demoType, setDemoType] = useState("education");
 
   const [demoPanelOpen, setDemoPanelOpen] = useState(false);
   const [demoData, setDemoData] = useState(null);
@@ -82,20 +167,9 @@ const Map = () => {
   // const [isOpen, setOpen] = useState(false);
   const [selPoint, setSelPoint] = useState(null);
 
+  //TODO allow filtering by level i.e. state --> county --> city --> block, etc.
   // const [levelData, setLevelData] = useState(null);
   // const [level, setLevel] = useState(null)
-
-  // useEffect = () => {
-  //   const queryCensusDeta = (nextDemoType) => {
-  //     if (demoType === nextDemoType) {
-  //       return;
-  //     }
-
-  //     get(`/api/${age_and_sex}`).then((demoObg) => setDemoData(demoObj));
-  //   };
-
-  //   [demoType];
-  // };
 
   const craftCensusAPIQuery = (targetData, variableNames) => {
     const GEOID = targetData.properties.GEOID;
@@ -116,7 +190,7 @@ const Map = () => {
   const queryByCounty = () => {
     const matchingObjects = tractData.features.filter((obj) => obj.properties.COUNTY === region);
 
-    const variableNames = demoTypeToFields["age_and_sex"];
+    const variableNames = demoTypeToFields[demoType];
 
     let censusURL = craftCensusAPIQuery(matchingObjects[0], variableNames);
 
@@ -142,17 +216,18 @@ const Map = () => {
       setRegion(selPoint.county);
     }
 
-    console.log("selpoint", selPoint);
-    console.log(region);
+    //debugging statements
+    // console.log("selpoint", selPoint);
+    // console.log(region);
   }, [selPoint]);
 
   useEffect(() => {
     if (demoPanelOpen && tractData) {
       queryByCounty(selPoint, tractData);
+      console.log(demoTypeToFields);
       console.log("demo", demoData);
-      // get(`/api/facilities`).then((pointsObj) => setDemoData(pointsObj))
     }
-  }, [demoPanelOpen]);
+  }, [demoPanelOpen, demoType]);
 
   const [center, setCenter] = useState(INITIAL_CENTER);
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
@@ -214,6 +289,7 @@ const Map = () => {
         });
       }
 
+      //TODO: prevent users from searching outside of massachusetts
       map.current.addControl(
         new MapboxGeocoder({
           accessToken: mapboxgl.accessToken,
@@ -225,8 +301,6 @@ const Map = () => {
       );
 
       map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
-
-      // map.current.addControl(new MapboxLegendControl({}, { reverseOrder: false }), "top-left");
 
       const popup = new mapboxgl.Popup({
         closeButton: false,
@@ -244,8 +318,6 @@ const Map = () => {
           center: e.features[0].geometry.coordinates,
         });
         setSelPoint(e.features[0].properties);
-
-        // setIsOpen();
       });
 
       map.current.on("click", "tract", (e) => {
@@ -330,11 +402,6 @@ const Map = () => {
     setDemoPanelOpen(false);
   };
 
-  // const handlePopupPress = () => {
-  //   setButtonPopup(true);
-  // };
-  // const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
-
   return (
     <>
       <div id="map-container" ref={mapContainer} style={{ width: "100%", height: "100vh" }} />
@@ -364,7 +431,23 @@ const Map = () => {
             Close
           </button>
           <h3>Demographic Data: {region}</h3>
-          <CensusDataTable censusData={demoData}></CensusDataTable>
+          <div className="sidebar-buttons">
+            <div style={{ maxHeight: "300px", overflow: "scroll" }}>
+              {demoTypes.map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setDemoType(type)}
+                  style={{ backgroundColor: demoType === type ? "#444" : "#555" }}
+                >
+                  {type.replace("_", " AND ").toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="sidebar-table">
+            <CensusDataTable censusData={demoData}></CensusDataTable>
+          </div>
         </div>
       )}
     </>
@@ -372,14 +455,9 @@ const Map = () => {
 };
 
 const MapPage = () => {
-  // const [isOpen, setOpen] = useState(false);
-  // const togglePanel = () => setOpen((prev) => !prev);
-  // const [sidebarOpen, setSidebarOpen] = useState(false);
-
   return (
     <div>
       <NavBar></NavBar>
-      {/* <CollapsePanel onClick={togglePanel} isOpen={panelOpen} /> */}
       <Map></Map>
       <Footer></Footer>
     </div>
@@ -387,21 +465,3 @@ const MapPage = () => {
 };
 
 export default MapPage;
-
-{
-  /* <button className="zoom-in-button" onClick={handlePopupPress}>
-        Open popup
-      </button> */
-}
-{
-  /* {buttonPopup && (
-        <div className="popup">
-          <div className="popup-inner">
-            <button onClick={setButtonPopup(false)} className="close-btn">
-              X
-            </button>
-            Hi!
-          </div>
-        </div>
-      )} */
-}

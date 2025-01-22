@@ -5,6 +5,7 @@ import "../../utilities.css";
 import "./Profile.css";
 import { UserContext } from "../App";
 import { get, post } from "../../utilities";
+import profileImg from "../../assets/person.png";
 // import { UserContext, useParams } from "../App";
 
 const Profile = () => {
@@ -33,20 +34,18 @@ const Profile = () => {
     <>
       <NavBar></NavBar>
       <div className="Profile-avatarContainer">
-        <div className="Profile-avatar" />
+        <img src={profileImg} className="Profile-avatar" alt="Profile img" />
       </div>
       {!user ? <div>Loading!</div> : <h1 className="Profile-name u-textCenter">{user.name}</h1>}
       <hr className="Profile-line" />
       <div className="u-flex">
         <div className="Profile-subContainer u-textCenter">
           <h4 className="Profile-subTitle">About Me</h4>
-          <div id="profile-description">
-            I am really allergic to cats i don't know why i have a catbook
-          </div>
+          <div id="profile-description">To fill</div>
         </div>
         <div className="Profile-subContainer u-textCenter">
-          <h4 className="Profile-subTitle">My Favorite Type of Cat</h4>
-          <div id="favorite-cat">corgi</div>
+          <h4 className="Profile-subTitle">Once again, to fill :o</h4>
+          {/* <div id="favorite-cat">corgi</div> */}
         </div>
       </div>
     </>
