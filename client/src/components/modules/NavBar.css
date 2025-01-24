@@ -5,6 +5,7 @@
 } */
 
 .NavBar-container {
+  font-family: "Jersey 15", sans-serif;
   display: flex; /* Use Flexbox for layout */
   justify-content: flex-start; /* Align items to the left */
   align-items: center; /* Vertically align items */

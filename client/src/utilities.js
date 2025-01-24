@@ -47,7 +47,21 @@ export function get(endpoint, params = {}) {
     });
 }
 
-export function get_census(endpoint) {
+// export function getCensusData(endpoint, params) {
+//   // Construct the query string from the params object
+//   const { year, survey, variables, countyFIPS, stateFIPS } = params;
+//   const queryString = `/${year}/${survey}?get=NAME,${variables}&for=county:${countyFIPS}&in=state:${stateFIPS}`;
+
+//   // Make the GET request to the backend
+//   return fetch(`${endpoint}?${queryString}`)
+//     .then(convertToJSON)
+//     .catch((error) => {
+//       // give a useful error message
+//       throw `GET request to ${endpoint} failed with error:\n${error}`;
+//     });
+// }
+
+export function get_external(endpoint) {
   const fullPath = endpoint;
   return fetch(fullPath)
     .then(convertToJSON)

@@ -14,6 +14,7 @@ const User = require("./models/user");
 const Facilities = require("./models/facilities");
 const Tracts = require("./models/tracts");
 const Counties = require("./models/counties");
+require("dotenv").config();
 // const Facility = require("./models/facility");
 // import authentication library
 const auth = require("./auth");
@@ -190,45 +191,47 @@ router.get("/census_counties", (req, res) => {
     });
 });
 
-// router.get("/proxy", async (req, res) => {
-//   try {
-//     const { apiUrl } = req.query;
+// router.get("/api/census_data", (req, res) => {
+//   const { year, survey, variables, countyFIPS, stateFIPS } = req.query;
+//   const apiKey = process.env.CENSUS_API_KEY;
 
-//     if (!apiUrl) {
-//       return res.status(400).json({ error: "Missing 'apiUrl' parameter." });
-//     }
-
-//     // Validate the base URL to allow only Census API requests
-//     if (!apiUrl.startsWith("https://api.census.gov/")) {
-//       return res.status(400).json({ error: "Invalid API URL. Only Census API URLs are allowed." });
-//     }
-
-//     // Add the API key if it's missing
-//     const apiKey = process.env.CENSUS_API_KEY;
-//     const apiUrlWithKey = apiUrl.includes("key=") ? apiUrl : `${apiUrl}&key=${apiKey}`;
-
-//     // Fetch data from the provided URL
-//     const response = await fetch(apiUrlWithKey, { redirect: "manual" });
-
-//     if (response.status === 302) {
-//       return res.status(500).json({ error: "Redirect detected. Check your API key or query." });
-//     }
-
-//     const data = await response.json();
-//     return res.status(200).json(data);
-//   } catch (error) {
-//     console.error("Error in proxy request:", error);
-//     res.status(500).json({ error: "Failed to fetch data." });
+//   // Validate required parameters
+//   if (!year || !survey || !variables || !countyFIPS || !stateFIPS) {
+//     return res.status(400).json({ error: "Missing one or more required parameters." });
 //   }
+
+//   // Construct the Census API URL
+//   const apiUrl = `https://api.census.gov/data/${year}/${survey}?get=NAME,${variables}&for=county:${countyFIPS}&in=state:${stateFIPS}&key=${apiKey}`;
+
+//   fetch(apiUrl)
+//     .then((response) => response.json()) // Resolve JSON
+//     .then((data) => res.json(data)) // Send the resolved data to the frontend
+//     .catch((error) => {
+//       res.status(500).json({ error: `Failed to fetch data from Census API: ${error.message}` });
+//     });
 // });
 
-// app.get('/api/point', (req, res) => {
-// write some code to user the coords to find the name and then return the id to
-//   Facility.find({name: req.query.name}).then((facilityObj)=>{
-//     res.send(facilityObj);
-//   })
+// const queryByCounty = () => {
+//     const matchingObjects = tractData.features.filter((obj) => obj.properties.COUNTY === region);
 
-// });
+//     const variables = demoTypeToFields[demoType];
+//     const variableNames = variables.join(",");
+
+//     const [stateFIPS, countyFIPS] = craftCensusAPIQuery(matchingObjects[0], variableNames);
+
+//     const params = {
+//       year: year,
+//       survey: survey,
+//       variables: variableNames,
+//       countyFIPS: countyFIPS,
+//       stateFIPS: stateFIPS,
+//     };
+//     // Extract relevant variables for matching objects
+//     get_external(`api/census_data`, params).then((apiData) => {
+//       console.log("api data", apiData);
+//       setDemoData(apiData);
+//       console.log("demo", demoData);
+//     });
 
 // router.post("/user", auth.ensureLoggedIn, (req, res) => {
 //   console.log(`Received a chat message from ${req.user.name}: ${req.body.content}`);

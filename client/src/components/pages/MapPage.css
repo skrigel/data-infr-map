@@ -6,25 +6,38 @@
 #map-container {
   height: 100%;
   width: 50%;
-
   /* temporarily set the background color so we can tell where the map container is positioned */
   background-color: lightgrey;
   color: black;
 }
 
+.reset-button {
+  display: block;
+  position: absolute;
+  border-color: black;
+  background-color: lightgray;
+  color: black;
+  bottom: 90px;
+  z-index: 3;
+  right: 15px;
+  padding: 10px 10px;
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+
 .sidebar {
   position: absolute;
   bottom: 50px;
-  z-index: 1;
   right: 15px;
   padding: 4px 10px;
   border-radius: 15px;
   cursor: pointer;
   background-color: rgb(35 55 75 / 90%);
   color: #fff;
-  padding: 6px 12px;
   font-family: monospace;
   z-index: 3;
+  display: flex;
 }
 
 .sidebar-table {
@@ -35,15 +48,17 @@
 
 .sidebar-bottom {
   background-color: rgba(35, 55, 75, 0.9);
-  color: #fff;
-  height: 40%;
-  width: 1000px;
-  font-family: monospace;
-  z-index: 1;
   position: absolute;
-  top: 75%;
-  left: 30%;
-  transform: translate(-50%, -50%);
+  color: #fff;
+  height: 300px;
+  width: 700px;
+  font-family: monospace;
+  z-index: 2;
+  position: relative;
+
+  top: 50%;
+  left: 2%;
+  /* transform: translate(-50%, -50%); */
   border-radius: 4px;
   padding: 20px;
   display: flex;
@@ -69,33 +84,16 @@
   background-color: #777;
 }
 
-.sidebar-top {
-  background-color: rgba(35, 55, 75, 0.9);
-  color: #fff;
-  height: 30%;
-  width: 300px;
-  font-family: monospace;
-  z-index: 1;
-  position: absolute;
-  top: 30%;
-  align-items: center;
-  left: 15%;
-  transform: translate(-50%, -50%);
-  border-radius: 4px;
-  padding: 20px;
-}
-
 .panel-container {
   display: flex;
   flex-direction: column; /* Stack items vertically */ /* Center the items horizontally */
   gap: 20px; /* Optional: Adjust the space between the panels */
   padding: 20px;
-  position: relative; /* Positioning context for absolute elements if needed */
+  position: absolute; /* Positioning context for absolute elements if needed */
 }
 
 .sidebar-top h3 {
   text-align: center;
-  font-size: 18px;
 }
 
 .sidebar-top p {
@@ -173,17 +171,6 @@
   word-wrap: break-word; /* Ensure text wraps inside cells */
 }
 
-.reset-button {
-  display: block;
-  position: absolute;
-  bottom: 90px;
-  z-index: 1;
-  right: 15px;
-  padding: 10px 10px;
-  border-radius: 15px;
-  cursor: pointer;
-}
-
 .zoom-in-button {
   position: absolute;
   bottom: 140px;
@@ -203,35 +190,3 @@
   border-radius: 15px;
   cursor: pointer;
 }
-
-/* popup-panel {
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.popup-panel.active {
-  display: block;
-}
-
-.popup-inner {
-  position: relative;
-  padding: 32px;
-  width: 100%;
-  max-width: 320px;
-  background-color: white;
-}
-
-.popup-inner .close-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  color: grey;
-} */

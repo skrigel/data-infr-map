@@ -33,16 +33,20 @@
 p {
   color: white;
   font-size: var(--m_text);
-  text-align: center;
 }
 
 .home-Container {
   /* background: url("../../assets/dnb_united_states_lrg.jpg") no-repeat center center fixed; */
+  font-family: "Jersey 15", sans-serif;
+  align-items: center;
+
   background-size: cover;
   min-height: 100vh; /* Ensures it covers the viewport */
 }
 
 .home-text {
+  text-align: center;
+  color: white;
   font-size: 30px;
 }
 

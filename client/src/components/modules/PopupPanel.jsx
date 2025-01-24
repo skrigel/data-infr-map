@@ -1,21 +1,24 @@
 import React from "react";
 import "../../utilities.css";
 import "./PopupPanel.css";
+import { getFontSize } from "@mantine/core";
 
 const PopupPanel = ({ selPoint, setSelPoint, setDemoPanelOpen }) => {
   return (
-    <div>
-      <div>
+    <div className="popup-panel">
+      <div className="popup-inner">
         <br></br>
         <button className="x-button" onClick={() => setSelPoint(null)}>
           X
         </button>
-        <h3>Info about: {selPoint.name}</h3>
-        <br></br>
+        <p>
+          <strong>Info about {selPoint.name}</strong>
+        </p>
+
         <p>Address: {selPoint.address + ", " + selPoint.locality}</p>
-        <br></br>
+
         <p>Company: {selPoint.company}</p>
-        <br></br>
+
         <p>Type: {selPoint.type}</p>
         <button onClick={() => setDemoPanelOpen(true)} className="view-more-button">
           View Regional Information

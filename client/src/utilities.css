@@ -15,6 +15,9 @@
 */
 
 /* TODO: REPLACE WITH YOUR OWN FONT! */
+@import "@mantine/core/styles.css";
+@import "tailwindcss";
+
 @import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Jersey+15&display=swap");
 
 :root {

@@ -13,7 +13,7 @@ const Home = () => {
         <NavBar></NavBar>
         <div className="home-text">
           <h1 className="home-header">Data Center Mapping</h1>
-          <p>Explore data centers in Massachusetts!</p>
+          <h2>Explore data centers in Massachusetts!</h2>
           <hr></hr>
           <div className="u-textCenter">
             <Link to="/map" className="u-link">

@@ -3,11 +3,11 @@ import NavBar from "../modules/NavBar";
 import Footer from "../modules/Footer";
 import CensusDataTable from "../modules/CensusDataTable";
 import React, { Component, useRef, useEffect, useState } from "react";
-
+import CollapsePanel from "../modules/CollapsePanel";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-
-import { get, post, get_census } from "../../utilities";
+import FillBox from "../modules/fillBox";
+import { get, post, get_external } from "../../utilities";
 
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -136,7 +136,7 @@ const demoTypes = [
   "labor",
 ];
 
-const year = "2023";
+// const year = "2023";
 const survey = "acs/acs5";
 
 //Please ignore that I put this here and not in .env --> I'm sorry
@@ -154,7 +154,7 @@ const Map = () => {
   const [demoPanelOpen, setDemoPanelOpen] = useState(false);
   const [demoData, setDemoData] = useState(null);
   const [region, setRegion] = useState(null);
-
+  const [year, setYear] = useState("2023");
   //TODO: allow users to go from block-->tract-->county-->state level
   // const [level, setLevel] = useState("tract");
 
@@ -164,7 +164,7 @@ const Map = () => {
   // };
   const [centerData, setCenterData] = useState(null);
   const [tractData, setTractData] = useState(null);
-  // const [isOpen, setOpen] = useState(false);
+  const [isCollOpen, setCollOpen] = useState(false);
   const [selPoint, setSelPoint] = useState(null);
 
   //TODO allow filtering by level i.e. state --> county --> city --> block, etc.
@@ -195,7 +195,7 @@ const Map = () => {
     let censusURL = craftCensusAPIQuery(matchingObjects[0], variableNames);
 
     // Extract relevant variables for matching objects
-    get_census(censusURL).then((apiData) => {
+    get_external(censusURL).then((apiData) => {
       console.log("api data", apiData);
       setDemoData(apiData);
       console.log("demo", demoData);
@@ -226,8 +226,9 @@ const Map = () => {
       queryByCounty(selPoint, tractData);
       console.log(demoTypeToFields);
       console.log("demo", demoData);
+      console.log(year);
     }
-  }, [demoPanelOpen, demoType]);
+  }, [demoPanelOpen, demoType, year]);
 
   const [center, setCenter] = useState(INITIAL_CENTER);
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
@@ -404,52 +405,61 @@ const Map = () => {
 
   return (
     <>
-      <div id="map-container" ref={mapContainer} style={{ width: "100%", height: "100vh" }} />
-      <button className="reset-button" onClick={handleResetButtonClick}>
-        Reset
-      </button>
-      <div className="sidebar">
-        Longitude: {center[0].toFixed(4)} | Latitude: {center[1].toFixed(4)} | Zoom:{" "}
-        {zoom.toFixed(2)}
-      </div>
+      <CollapsePanel
+        isOpen={isCollOpen}
+        setFunc={setCollOpen}
+        year={year}
+        setYear={setYear}
+      ></CollapsePanel>
+      {/* <FillBox year={year} setYear={handleYearSubmit} defText={"Enter Year Here"}></FillBox> */}
 
-      {/* <div className="panel-container"> */}
-
-      {selPoint && (
-        <div className="sidebar-top">
-          <PopupPanel
-            selPoint={selPoint}
-            setSelPoint={setSelPoint}
-            setDemoPanelOpen={setDemoPanelOpen}
-          />
+      <div id="map-container" ref={mapContainer} style={{ width: "100%", height: "100vh" }}>
+        <button className="reset-button" onClick={handleResetButtonClick}>
+          Reset
+        </button>
+        <div className="sidebar">
+          Longitude: {center[0].toFixed(4)} | Latitude: {center[1].toFixed(4)} | Zoom:{" "}
+          {zoom.toFixed(2)}
         </div>
-      )}
 
-      {demoPanelOpen && (
-        <div className="sidebar-bottom">
-          <button onClick={handleCloseDemoPanel} className="close-button">
-            Close
-          </button>
-          <h3>Demographic Data: {region}</h3>
-          <div className="sidebar-buttons">
-            <div style={{ maxHeight: "300px", overflow: "scroll" }}>
-              {demoTypes.map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setDemoType(type)}
-                  style={{ backgroundColor: demoType === type ? "#444" : "#555" }}
-                >
-                  {type.replace("_", " AND ").toUpperCase()}
-                </button>
-              ))}
+        {/* <div className="panel-container"> */}
+
+        {selPoint && (
+          <div>
+            <PopupPanel
+              selPoint={selPoint}
+              setSelPoint={setSelPoint}
+              setDemoPanelOpen={setDemoPanelOpen}
+            />
+          </div>
+        )}
+
+        {demoPanelOpen && (
+          <div className="sidebar-bottom">
+            <button onClick={handleCloseDemoPanel} className="close-button">
+              Close
+            </button>
+            <h3>Demographic Data: {region}</h3>
+            <div className="sidebar-buttons">
+              <div style={{ maxHeight: "300px", overflow: "scroll" }}>
+                {demoTypes.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setDemoType(type)}
+                    style={{ backgroundColor: demoType === type ? "#444" : "#555", fontSize: 14 }}
+                  >
+                    {type.replace("_", " AND ").toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="sidebar-table">
+              <CensusDataTable censusData={demoData}></CensusDataTable>
             </div>
           </div>
-
-          <div className="sidebar-table">
-            <CensusDataTable censusData={demoData}></CensusDataTable>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };

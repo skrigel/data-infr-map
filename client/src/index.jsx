@@ -4,6 +4,7 @@ import App from "./components/App";
 import Home from "./components/pages/Home";
 import MapPage from "./components/pages/MapPage";
 import NotFound from "./components/pages/NotFound";
+import "bootstrap/dist/css/bootstrap.min.css";
 import mapboxgl from "mapbox-gl";
 
 // import Profile from "./components/pages/Profile";
