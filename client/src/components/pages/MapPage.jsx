@@ -178,7 +178,7 @@ const Map = () => {
   const [levelData, setLevelData] = useState(null);
 
   const [centerData, setCenterData] = useState(null);
-  const [isCollOpen, setCollOpen] = useState(false);
+  const [isCollOpen, setCollOpen] = useState(true);
   const [selPoint, setSelPoint] = useState(null);
   const [networks, setNetworks] = useState([]);
   const [currNetId, setCurrNetId] = useState(null);
