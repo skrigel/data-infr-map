@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
+import MapLegend from "./MapLegend";
 import FillBox from "./fillBox";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faChevronUp, faChevronDown } from "@fortawesome/fontawesome-free-solid";
 import "./CollapsePanel.css";
 import "../../utilities.css";
 
-const CollapsePanel = ({ isOpen, setFunc, year, setYear }) => {
+const CollapsePanel = ({ isOpen, setFunc, year, setYear, level, setLevel }) => {
   const [height, setHeight] = useState(0);
   const ref = useRef(null);
+
+  const handleLevelClick = (newLevel) => {
+    setLevel(newLevel);
+  };
 
   const handleYearSubmit = (inpYear) => {
     setYear(inpYear);
@@ -56,6 +61,9 @@ const CollapsePanel = ({ isOpen, setFunc, year, setYear }) => {
           <div ref={ref}>
             <div className={"collapsible-content-padding-edonec"}>
               <FillBox year={year} setYear={handleYearSubmit} defText={""}></FillBox>
+            </div>
+            <div className={"collapsible-content-padding-edonec-sm"}>
+              <MapLegend level={level} setLevel={handleLevelClick}></MapLegend>
             </div>
           </div>
         </div>

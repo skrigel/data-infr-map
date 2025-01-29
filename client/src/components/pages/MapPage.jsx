@@ -1,6 +1,20 @@
 import "./MapPage.css";
 import NavBar from "../modules/NavBar";
 import Footer from "../modules/Footer";
+import { ExternalLink } from "react-external-link";
+import {
+  Button,
+  Box,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Container,
+  Link,
+  IconButton,
+} from "@mui/material";
 import CensusDataTable from "../modules/CensusDataTable";
 import React, { Component, useRef, useEffect, useState } from "react";
 import CollapsePanel from "../modules/CollapsePanel";
@@ -13,6 +27,9 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import PopupPanel from "../modules/PopupPanel";
 import PopupButtons from "../modules/PopupButtons";
+import { MapContext } from "react-map-gl/dist/esm/components/map";
+import MapLegend from "../modules/MapLegend";
+// import { use } from "../../../../server/api";
 
 const INITIAL_CENTER = [-71.057083, 42.361145];
 const INITIAL_ZOOM = 10.12;
@@ -155,80 +172,186 @@ const Map = () => {
   const [demoData, setDemoData] = useState(null);
   const [region, setRegion] = useState(null);
   const [year, setYear] = useState("2023");
+
   //TODO: allow users to go from block-->tract-->county-->state level
-  // const [level, setLevel] = useState("tract");
+  const [level, setLevel] = useState("places");
+  const [levelData, setLevelData] = useState(null);
 
-  // const handleSetLevel = () => {
-  //   // implement logic here
-
-  // };
   const [centerData, setCenterData] = useState(null);
-  const [tractData, setTractData] = useState(null);
   const [isCollOpen, setCollOpen] = useState(false);
   const [selPoint, setSelPoint] = useState(null);
+  const [networks, setNetworks] = useState([]);
+  const [currNetId, setCurrNetId] = useState(null);
+  const [netFacLayer, setNetFacLayer] = useState([]);
+
+  // useEffect(() => {
+
+  //   const extractNetworksbyFac = () => {
+  //     if (selPoint && currNet) {
+  //       get(`/api/networks`, {net_id: currNet.net_id}).then((netObj) => setCurrNet(netObj));
+  //     }
+
+  //   };
+
+  // }, [currNet])
+
+  //extracts networks objects for the selected facility
+  useEffect(() => {
+    const fetchNetworks = async () => {
+      if (selPoint) {
+        const networkIds = selPoint.networks || [];
+
+        if (networkIds.length > 0) {
+          try {
+            // Fetch all networks first
+            const allNetworks = await get(`/api/networks`);
+
+            // Filter networks to match only the selected point's network IDs
+            const networkData = allNetworks.filter((network) =>
+              networkIds.includes(network.net_id)
+            );
+            console.log("Filtered Networks:", networkData);
+            if (networkData) {
+              setNetworks(networkData);
+            }
+          } catch (error) {
+            console.error("Error fetching networks:", error);
+          }
+        }
+      }
+    };
+
+    fetchNetworks();
+
+    // const fetchNetworks = async () => {
+    //   if (selPoint) {
+
+    //     const networkIds = selPoint.networks || [];
+
+    //     if (networkIds) {
+    //       const networkData = await Promise.all(
+    //         networkIds.map((netId) => get(`/api/networks`).filter(network =>
+    //           networkIds.includes(network.net_id)))
+    //       );
+    //       setNetworks(networkData);
+    //       console.log("networks", networks);
+    //     }
+    //     console.log("networkId", networkIds);
+    //   }
+    // };
+    // setTimeout(3);
+    // fetchNetworks();
+  }, [selPoint]);
+
+  //handle Net selection:
+
+  const handleNetworkSelect = (network_id) => {
+    const selectedFacilities = centerData.features.filter((facility) => {
+      return facility.properties.networks.includes(network_id);
+    });
+
+    const lineFeatures = selectedFacilities
+      .map((facility, index, filteredFacilities) => {
+        if (index === 0) return null; // Skip the first facility since it has no previous facility to connect to
+
+        return {
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [
+              filteredFacilities[index - 1].geometry.coordinates,
+              facility.geometry.coordinates,
+            ],
+          },
+          properties: { net_id: network_id },
+        };
+      })
+      .filter(Boolean); // Remove null values from the array
+
+    // Create a new layer for the lines
+    const lineLayer = {
+      type: "FeatureCollection",
+      features: lineFeatures,
+    };
+
+    console.log("lineLayer", lineLayer);
+
+    // Update the state with the new layer
+    setNetFacLayer(lineLayer);
+  };
+
+  //on selection of network, find facilities to connect
+  //first, find the ids
+  useEffect(() => {
+    if (currNetId && centerData) {
+      handleNetworkSelect(currNetId);
+    }
+  }, [currNetId]);
+
+  useEffect(() => {
+    setCurrNetId(null);
+    setNetworks(null);
+    setNetFacLayer(null);
+  }, [selPoint]);
 
   //TODO allow filtering by level i.e. state --> county --> city --> block, etc.
-  // const [levelData, setLevelData] = useState(null);
-  // const [level, setLevel] = useState(null)
-
-  const craftCensusAPIQuery = (targetData, variableNames) => {
-    const GEOID = targetData.properties.GEOID;
-
-    // Extract state FIPS and county FIPS from GEOID
-    const stateFIPS = GEOID.substring(0, 2); // First 2 digits represent state FIPS
-    const countyFIPS = GEOID.substring(2); // Remaining digits represent county FIPS
-
-    // Join variables into a comma-separated list
-    const variables = variableNames.join(",");
-
-    // Construct the API query URL
-    const apiUrl = `https://api.census.gov/data/${year}/${survey}?get=NAME,${variables}&for=county:${countyFIPS}&in=state:${stateFIPS}&key=${CENSUS_API_KEY}`;
-
-    return apiUrl;
-  };
-
-  const queryByCounty = () => {
-    const matchingObjects = tractData.features.filter((obj) => obj.properties.COUNTY === region);
-
-    const variableNames = demoTypeToFields[demoType];
-
-    let censusURL = craftCensusAPIQuery(matchingObjects[0], variableNames);
-
-    // Extract relevant variables for matching objects
-    get_external(censusURL).then((apiData) => {
-      console.log("api data", apiData);
-      setDemoData(apiData);
-      console.log("demo", demoData);
-    });
-  };
 
   useEffect(() => {
     get(`/api/facilities`).then((pointsObj) => setCenterData(pointsObj));
   }, []);
 
   useEffect(() => {
-    get(`/api/census_counties`).then((pointsObj) => setTractData(pointsObj));
-  }, []);
+    get(`/api/census_${level}`).then((pointsObj) => setLevelData(pointsObj));
+  }, [level]);
 
-  useEffect(() => {
-    handleCloseDemoPanel();
-    if (selPoint) {
-      setRegion(selPoint.county);
-    }
+  function standardizeNetCount(features) {
+    // Extract net_count values
+    const counts = features.map((feature) => {
+      const netCount = feature.properties.net_count || 0; // Handle null or undefined
+      return netCount;
+    });
+    // Normalize the counts
+    const min = Math.min(...counts);
+    const max = Math.max(...counts);
 
-    //debugging statements
-    // console.log("selpoint", selPoint);
-    // console.log(region);
-  }, [selPoint]);
+    features.forEach((feature, index) => {
+      const rawCount = counts[index];
+      feature.properties.normalized_net_count = max === min ? 0 : (rawCount - min) / (max - min);
+    });
 
-  useEffect(() => {
-    if (demoPanelOpen && tractData) {
-      queryByCounty(selPoint, tractData);
-      console.log(demoTypeToFields);
-      console.log("demo", demoData);
-      console.log(year);
-    }
-  }, [demoPanelOpen, demoType, year]);
+    return features;
+  }
+
+  // Add the GeoJSON to Mapbox
+  function addFacilitiesLayer(map, geoJSON) {
+    const standardizedFeatures = standardizeNetCount(geoJSON.features);
+    const standardizedGeoJSON = { ...geoJSON, features: standardizedFeatures };
+    map.addSource("facilities", {
+      type: "geojson",
+      data: standardizedGeoJSON,
+    });
+
+    // Add a circle layer
+    map.addLayer({
+      id: "circle",
+      type: "circle",
+      source: "facilities",
+      paint: {
+        // Scale circle radius with normalized_net_count
+        "circle-radius": [
+          "interpolate",
+          ["linear"],
+          ["get", "normalized_net_count"],
+          0,
+          10, // Minimum size
+          1,
+          50, // Maximum size
+        ],
+        "circle-color": "#007cbf", // Circle color
+        "circle-opacity": 0.6, // Circle transparency
+      },
+    });
+  }
 
   const [center, setCenter] = useState(INITIAL_CENTER);
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
@@ -236,29 +359,32 @@ const Map = () => {
   useEffect(() => {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/skrigel/cm5wnzuqw00ly01s3a91ieup2", // Mapbox style URL
+      style: "mapbox://styles/mapbox/standard", // Mapbox style URL
       center: center,
       zoom: zoom,
       maxBounds: MAP_BOUNDS,
     });
 
     map.current.on("load", () => {
-      if (centerData && tractData) {
-        console.log(tractData.features[0]);
-        map.current.addSource("points", {
-          type: "geojson",
-          data: centerData,
-        });
+      // console.log(levelData["features"][0]);
+      if (centerData && levelData) {
+        addFacilitiesLayer(map.current, centerData);
+        // map.current.addSource("points", {
+        //   type: "geojson",
+        //   data: centerData,
+        // });
 
-        map.current.addSource("tracts", {
+        console.log("level", levelData["features"][0].properties);
+
+        map.current.addSource("geosections", {
           type: "geojson",
-          data: tractData,
+          data: levelData,
         });
 
         map.current.addLayer({
-          id: "tract",
+          id: "geosection_fill",
           type: "fill",
-          source: "tracts",
+          source: "geosections",
           layout: {},
           paint: {
             "fill-color": "#0080ff",
@@ -267,29 +393,47 @@ const Map = () => {
         });
 
         map.current.addLayer({
-          id: "outline",
+          id: "geosection_outline",
           type: "line",
-          source: "tracts",
+          source: "geosections",
           layout: {},
           paint: {
             "line-color": "#000",
-            "line-width": 2,
+            "line-width": 0.5,
           },
         });
 
-        map.current.addLayer({
-          id: "circle",
-          type: "circle",
-          source: "points",
-          paint: {
-            "circle-color": "#4264fb",
-            "circle-radius": 8,
-            "circle-stroke-width": 3,
-            "circle-stroke-color": "#ffffff",
-          },
-        });
+        if (netFacLayer) {
+          map.current.addSource("netfac", {
+            type: "geojson",
+            data: netFacLayer,
+          });
+
+          map.current.addLayer({
+            id: "netfac_line",
+            type: "line",
+            source: "netfac",
+            layout: {},
+            paint: {
+              "fill-color": "#0080ff",
+              "fill-opacity": 0,
+            },
+          });
+        }
+        // map.current.addLayer({
+        //   id: "circle",
+        //   type: "circle",
+        //   source: "points",
+        //   paint: {
+        //     "circle-color": "#4264fb",
+        //     "circle-radius": 8,
+        //     "circle-stroke-width": 3,
+        //     "circle-stroke-color": "#ffffff",
+        //   },
+        // });
       }
 
+      // map.current.querySourceFeatures("facilities", {filter: ['in', 'COUNTY', selPoint.properties.COUNTY]})
       //TODO: prevent users from searching outside of massachusetts
       map.current.addControl(
         new MapboxGeocoder({
@@ -318,10 +462,12 @@ const Map = () => {
         map.current.flyTo({
           center: e.features[0].geometry.coordinates,
         });
+        console.log("right before setting", e.features[0].properties);
+        e.features[0].properties.networks = JSON.parse(e.features[0].properties.networks);
         setSelPoint(e.features[0].properties);
       });
 
-      map.current.on("click", "tract", (e) => {
+      map.current.on("click", "geosection_fill", (e) => {
         // Open the popup block
         // const coordinates = e.features[0].geometry.coordinates;
         const coordinates = e.features[0].geometry.coordinates;
@@ -345,7 +491,7 @@ const Map = () => {
         const properties = e.features[0].properties;
 
         // build our popup html with our geoJSON properties
-        const popupH = `<strong>${properties.COUNTY}</strong>`;
+        const popupH = `<strong>${properties.NAME}</strong>`;
 
         levelPopup.setLngLat(avgCoords).setHTML(popupH).addTo(map.current);
       });
@@ -390,17 +536,13 @@ const Map = () => {
     return () => {
       map.current.remove();
     };
-  }, [centerData, tractData]);
+  }, [centerData, levelData, netFacLayer]);
 
   const handleResetButtonClick = () => {
     map.current.flyTo({
       center: INITIAL_CENTER,
       zoom: INITIAL_ZOOM,
     });
-  };
-
-  const handleCloseDemoPanel = () => {
-    setDemoPanelOpen(false);
   };
 
   return (
@@ -410,8 +552,54 @@ const Map = () => {
         setFunc={setCollOpen}
         year={year}
         setYear={setYear}
+        level={level}
+        setLevel={setLevel}
       ></CollapsePanel>
-      {/* <FillBox year={year} setYear={handleYearSubmit} defText={"Enter Year Here"}></FillBox> */}
+
+      {networks && (
+        <TableContainer className="w-2xl h-100%">
+          <TableHead>
+            <TableRow>
+              <TableCell>Network ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Network Traffic</TableCell>
+              <TableCell>Website</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {networks.map((network) => (
+              <TableRow
+                key={network.net_id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {network.net_id}
+                </TableCell>
+                <TableCell align="right">{network.name}</TableCell>
+                <TableCell align="right">
+                  {network.info_traffic ? network.info_traffic : "N/A"}
+                </TableCell>
+                <TableCell align="right">
+                  <Button>
+                    <a href={network.org_website} target="_blank">
+                      Website
+                    </a>
+                  </Button>
+                  {/* <Button className="in-hover:bg-gray-500" href={network.website}>
+                    Website
+                  </Button> */}
+                </TableCell>
+                <TableCell align="right">
+                  <Button onClick={() => handleNetworkSelect(network.net_id)}>
+                    Connect Facilities
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </TableContainer>
+      )}
 
       <div id="map-container" ref={mapContainer} style={{ width: "100%", height: "100vh" }}>
         <button className="reset-button" onClick={handleResetButtonClick}>
@@ -425,39 +613,13 @@ const Map = () => {
         {/* <div className="panel-container"> */}
 
         {selPoint && (
-          <div>
+          <Container>
             <PopupPanel
               selPoint={selPoint}
               setSelPoint={setSelPoint}
               setDemoPanelOpen={setDemoPanelOpen}
             />
-          </div>
-        )}
-
-        {demoPanelOpen && (
-          <div className="sidebar-bottom">
-            <button onClick={handleCloseDemoPanel} className="close-button">
-              Close
-            </button>
-            <h3>Demographic Data: {region}</h3>
-            <div className="sidebar-buttons">
-              <div style={{ maxHeight: "300px", overflow: "scroll" }}>
-                {demoTypes.map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => setDemoType(type)}
-                    style={{ backgroundColor: demoType === type ? "#444" : "#555", fontSize: 14 }}
-                  >
-                    {type.replace("_", " AND ").toUpperCase()}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="sidebar-table">
-              <CensusDataTable censusData={demoData}></CensusDataTable>
-            </div>
-          </div>
+          </Container>
         )}
       </div>
     </>

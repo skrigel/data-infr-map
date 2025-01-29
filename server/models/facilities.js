@@ -5,7 +5,6 @@ const FacilitySchema = new mongoose.Schema({
   type: { type: String, required: true }, // Ensure `type` is required
   properties: {
     name: { type: String },
-    company: { type: String },
     type: { type: String },
     address: { type: String },
     locality: { type: String },
@@ -13,6 +12,10 @@ const FacilitySchema = new mongoose.Schema({
     state: { type: String },
     country: { type: String },
     zip: { type: String },
+    networks: { type: [Number] },
+    management: { type: String },
+    net_count: { type: Number },
+    ix_count: { type: Number },
   },
   geometry: {
     type: { type: String, required: true }, // Ensure `type` is required for GeoJSON

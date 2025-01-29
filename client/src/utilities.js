@@ -61,6 +61,21 @@ export function get(endpoint, params = {}) {
 //     });
 // }
 
+// const fetchFacilityData = async (facId) => {
+//   try {
+//     const response = await fetch(`/api/peeringdb/net/${facId}`);
+//     if (!response.ok) {
+//       throw new Error(`Error: ${response.status}`);
+//     }
+//     const data = await response.json();
+//     console.log("PeeringDB Facility Data:", data);
+//     return data;
+//   } catch (error) {
+//     console.error("Failed to fetch facility data:", error);
+//     return null;
+//   }
+// };
+
 export function get_external(endpoint) {
   const fullPath = endpoint;
   return fetch(fullPath)

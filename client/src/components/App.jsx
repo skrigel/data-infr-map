@@ -11,7 +11,7 @@ import { socket } from "../client-socket";
 import { get, post } from "../utilities";
 
 export const UserContext = createContext(null);
-import { MantineProvider, MantineThemeProvider } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 /**
  * Define the "App" component
  */

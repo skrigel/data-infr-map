@@ -1,28 +1,61 @@
-const MapLegend = (props) => {
-  // start with by level
-  const level = props.level;
-  const setLevel = props.setLevelData; //... etc
-  //try this later
-  const subset = props.subset; //can be none --> show all
+import React, { useState } from "react";
+import { Button, Box } from "@mui/material";
 
-  switch (level) {
-    case "tracts":
-      return;
-    // case value2:
-    //   // code block 2
-    //   break;
-    // ...
-    default:
-      return (
-        <>
-          <button>Click me! I do nothing!!</button>
-        </>
-      );
-    // code block to be executed if none of the cases match
-  }
-  //TODO: buttons displayed row-wise (use flex )
-  // button: name
-  // button2: namew
+const MapLegend = ({ level, setLevel }) => {
+  // start with by level
+  //try this later
+  return (
+    <div className="space-x-64">
+      <div className="mb-4 mt-2 inline-block">
+        <header className="">
+          <strong> Filter by Region: </strong>
+          <Button className="bg-gray-400 border-2 border-black" onClick={() => setLevel("tracts")}>
+            By Tract
+          </Button>
+          <Button
+            className="bg-gray-400 border-1 border-black"
+            onClick={() => setLevel("counties")}
+          >
+            By County
+          </Button>
+          <Button
+            className="bg-gray-400 border-2 border-black"
+            onClick={() => setLevel("county_subdivisions")}
+          >
+            By County Subdivision
+          </Button>
+          <Button className="bg-gray-400 border-2 border-black" onClick={() => setLevel("places")}>
+            By Incorporated Place
+          </Button>
+          <Button
+            className="bg-gray-400 border-2 border-black"
+            onClick={() => setLevel("block_groups")}
+          >
+            By Block Group
+          </Button>
+        </header>
+      </div>
+    </div>
+  );
 };
 
 export default MapLegend;
+
+// switch (level) {
+//   case "tracts":
+//     return;
+//   // case value2:
+//   //   // code block 2
+//   //   break;
+//   // ...
+//   default:
+//     return (
+//       <>
+//         <button>Click me! I do nothing!!</button>
+//       </>
+//     );
+// code block to be executed if none of the cases match
+// }
+//TODO: buttons displayed row-wise (use flex )
+// button: name
+// button2: namew
