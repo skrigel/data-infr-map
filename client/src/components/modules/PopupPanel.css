@@ -1,3 +1,58 @@
+.popup-panel {
+  background-color: rgba(35, 55, 75, 0.9);
+  color: #fff;
+  max-height: 400px;
+  width: 320px;
+  font-family: monospace;
+  z-index: 1;
+  position: absolute;
+  top: 10%;
+  left: 2%;
+  border-radius: 3px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Enables scrolling if content overflows */
+}
+
+.popup-text {
+  font-size: 12px;
+  text-align: left;
+  flex-grow: 1; /* Allows text to expand and push the button down */
+  overflow-wrap: break-word; /* Ensures long words don't overflow */
+}
+
+.popup-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.view-more-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  position: relative; /* Prevents it from overlapping text */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: center; /* Centers the button */
+}
+
+.x-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 2;
+}
+
 /* .popup-panel {
   position: fixed;
   top: 50%;
@@ -10,11 +65,10 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 } */
 
-.popup-panel {
-  display: flex;
+/* .popup-panel {
   background-color: rgba(35, 55, 75, 0.9);
   color: #fff;
-  height: 30%;
+  height: 300px;
   width: 300px;
   font-family: monospace;
   z-index: 1;
@@ -23,27 +77,22 @@
   left: 2%;
   border-radius: 3px;
   padding: 20px;
-}
+} */
 
-h3 {
+/* h3 {
   font-size: 2px;
   text-align: left;
-}
+} */
 
-p {
+/* .popup-text {
+  block-size: fit-content;
   font-size: 12px;
   text-align: left;
 }
-/*
-.popup-panel.active {
-  display: block;
-} */
 
 .popup-inner {
-  margin-top: 0.5;
-  height: 60%;
   width: 100%;
-}
+} */
 
 /* .popup-inner .close-btn {
   position: absolute;
@@ -51,15 +100,15 @@ p {
   right: 16px;
   color: grey;
 } */
-
+/*
 .view-more-button {
   background-color: #007bff;
   color: white;
   padding: 10px;
-  /* border: none;
-  border-radius: 4px; */
-  /* bottom: 20px; */
-  /* position: absolute; */
+
+  margin-top: 10px;
+  bottom: 20px;
+  position: absolute;
   cursor: pointer;
   transition: background-color 0.3s ease;
   z-index: 2;
@@ -77,4 +126,4 @@ p {
   cursor: pointer;
   transition: background-color 0.3s ease;
   z-index: 2;
-}
+} */

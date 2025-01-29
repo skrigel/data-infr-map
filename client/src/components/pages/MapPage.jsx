@@ -550,13 +550,12 @@ const Map = () => {
       <CollapsePanel
         isOpen={isCollOpen}
         setFunc={setCollOpen}
-        year={year}
-        setYear={setYear}
+        networks={networks}
         level={level}
         setLevel={setLevel}
       ></CollapsePanel>
 
-      {networks && (
+      {/* {networks && (
         <TableContainer className="w-2xl h-100%">
           <TableHead>
             <TableRow>
@@ -586,9 +585,7 @@ const Map = () => {
                       Website
                     </a>
                   </Button>
-                  {/* <Button className="in-hover:bg-gray-500" href={network.website}>
-                    Website
-                  </Button> */}
+
                 </TableCell>
                 <TableCell align="right">
                   <Button onClick={() => handleNetworkSelect(network.net_id)}>
@@ -599,7 +596,7 @@ const Map = () => {
             ))}
           </TableBody>
         </TableContainer>
-      )}
+      )} */}
 
       <div id="map-container" ref={mapContainer} style={{ width: "100%", height: "100vh" }}>
         <button className="reset-button" onClick={handleResetButtonClick}>
@@ -617,7 +614,7 @@ const Map = () => {
             <PopupPanel
               selPoint={selPoint}
               setSelPoint={setSelPoint}
-              setDemoPanelOpen={setDemoPanelOpen}
+              setDemoPanelOpen={setCollOpen}
             />
           </Container>
         )}
