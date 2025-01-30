@@ -15,20 +15,18 @@ import {
   Link,
   IconButton,
 } from "@mui/material";
-import CensusDataTable from "../modules/CensusDataTable";
+// import CensusDataTable from "../modules/CensusDataTable";
 import React, { Component, useRef, useEffect, useState } from "react";
 import CollapsePanel from "../modules/CollapsePanel";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import FillBox from "../modules/fillBox";
+// import FillBox from "../modules/fillBox";
 import { get, post, get_external } from "../../utilities";
 
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import PopupPanel from "../modules/PopupPanel";
-import PopupButtons from "../modules/PopupButtons";
-import { MapContext } from "react-map-gl/dist/esm/components/map";
-import MapLegend from "../modules/MapLegend";
+
 // import { use } from "../../../../server/api";
 
 const INITIAL_CENTER = [-71.057083, 42.361145];
@@ -38,123 +36,6 @@ const MAP_BOUNDS = new mapboxgl.LngLatBounds(
   new mapboxgl.LngLat(-74.3099, 40.9944),
   new mapboxgl.LngLat(-70.2739, 42.9)
 );
-const CENSUS_API_KEY = "af2cf73162a5d8a466c8918ebfc397716c84093c";
-
-const demoTypeToFields = {
-  sex_citizenship: [
-    "B05003_001E",
-    "B05003_002E",
-    "B05003_013E",
-    "B05002_026E",
-    "B16008_020E",
-    "B05007_027E",
-    "B05007_014E",
-    "B05007_040E",
-    "B05007_094E",
-  ],
-  family_households: [
-    "B05009_002E",
-    "B05009_020E",
-    "B05003_014E",
-    "B05003_003E",
-    "B05010_019E",
-    "B05010_023E",
-    "B07008_002E",
-    "B07008_003E",
-    "B07008_004E",
-    "B11001_002E",
-    "B11001_007E",
-    "B11001_008E",
-  ],
-  income_poverty: [
-    "B06010_003E",
-    "B06010_002E",
-    "B19013_001E",
-    "B06010_004E",
-    "B06010_005E",
-    "B06010_006E",
-    "B06010_007E",
-    "B06010_009E",
-    "B06010_010E",
-    "B06010_011E",
-    "B19001_014E",
-    "B19001_015E",
-    "B19001_016E",
-    "B19001_017E",
-    "B17001_003E",
-    "B17001_017E",
-  ],
-  education: [
-    "B15002_010E",
-    "B15002_011E",
-    "B15002_014E",
-    "B15002_015E",
-    "B15002_016E",
-    "B15002_018E",
-    "B15002_028E",
-    "B15002_028E",
-    "B15002_031E",
-    "B15002_032E",
-    "B15002_033E",
-    "B15002_035E",
-    "B15012_009E",
-    "B15012_010E",
-    "B15012_012E",
-    "B15012_013E",
-    "B15012_014E",
-    "B14003_031E",
-    "B14003_040E",
-    "B14003_003E",
-    "B14003_012E",
-  ],
-  computer_internet: [
-    "B28001_002E",
-    "B28001_005E",
-    "B28003_002E",
-    "B28001_003E",
-    "B28001_011E",
-    "B28002_002E",
-    "B28002_005E",
-    "B28002_005E",
-    "B28002_013E",
-    "B28002_013E",
-    "B28002_009E",
-  ],
-  labor: [
-    "B23025_002E",
-    "B23025_004E",
-    "B23025_005E",
-    "B23025_007E",
-    "B20005_050E",
-    "B20005_003E",
-    "B23022_004E",
-    "B23022_028E",
-    "B20005_050E",
-    "B20005_003E",
-    "B08526_002E",
-    "B08526_003E",
-    "B08526_004E",
-    "B08526_006E",
-    "B08526_007E",
-    "B08526_008E",
-    "B08526_009E",
-    "B08526_010E",
-    "B08526_011E",
-    "B08526_012E",
-    "B08526_014E",
-  ],
-};
-const demoTypes = [
-  "sex_citizenship",
-  "income_poverty",
-  "education",
-  "computer_internet",
-  "family_households",
-  "labor",
-];
-
-// const year = "2023";
-const survey = "acs/acs5";
 
 //Please ignore that I put this here and not in .env --> I'm sorry
 mapboxgl.accessToken =
@@ -222,25 +103,6 @@ const Map = () => {
     };
 
     fetchNetworks();
-
-    // const fetchNetworks = async () => {
-    //   if (selPoint) {
-
-    //     const networkIds = selPoint.networks || [];
-
-    //     if (networkIds) {
-    //       const networkData = await Promise.all(
-    //         networkIds.map((netId) => get(`/api/networks`).filter(network =>
-    //           networkIds.includes(network.net_id)))
-    //       );
-    //       setNetworks(networkData);
-    //       console.log("networks", networks);
-    //     }
-    //     console.log("networkId", networkIds);
-    //   }
-    // };
-    // setTimeout(3);
-    // fetchNetworks();
   }, [selPoint]);
 
   //handle Net selection:
@@ -420,17 +282,6 @@ const Map = () => {
             },
           });
         }
-        // map.current.addLayer({
-        //   id: "circle",
-        //   type: "circle",
-        //   source: "points",
-        //   paint: {
-        //     "circle-color": "#4264fb",
-        //     "circle-radius": 8,
-        //     "circle-stroke-width": 3,
-        //     "circle-stroke-color": "#ffffff",
-        //   },
-        // });
       }
 
       // map.current.querySourceFeatures("facilities", {filter: ['in', 'COUNTY', selPoint.properties.COUNTY]})

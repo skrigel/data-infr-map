@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import MapLegend from "./MapLegend";
-import FillBox from "./fillBox";
+// import FillBox from "./fillBox";
 import {
   Button,
   Box,
@@ -14,8 +14,7 @@ import {
   Link,
   IconButton,
 } from "@mui/material";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faChevronUp, faChevronDown } from "@fortawesome/fontawesome-free-solid";
+
 import "./CollapsePanel.css";
 import "../../utilities.css";
 

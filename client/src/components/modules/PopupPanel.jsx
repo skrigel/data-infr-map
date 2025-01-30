@@ -1,8 +1,6 @@
 import React from "react";
 import "../../utilities.css";
 import "./PopupPanel.css";
-import { getFontSize } from "@mantine/core";
-import { Box } from "@mui/material";
 
 const PopupPanel = ({ selPoint, setSelPoint, setDemoPanelOpen }) => {
   return (
