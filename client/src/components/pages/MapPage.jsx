@@ -551,6 +551,7 @@ const Map = () => {
         isOpen={isCollOpen}
         setFunc={setCollOpen}
         networks={networks}
+        handleNetworkSelect={handleNetworkSelect}
         level={level}
         setLevel={setLevel}
       ></CollapsePanel>

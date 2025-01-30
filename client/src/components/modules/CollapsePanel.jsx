@@ -19,7 +19,7 @@ import {
 import "./CollapsePanel.css";
 import "../../utilities.css";
 
-const CollapsePanel = ({ isOpen, setFunc, networks, level, setLevel }) => {
+const CollapsePanel = ({ isOpen, setFunc, networks, handleNetworkSelect, level, setLevel }) => {
   const [height, setHeight] = useState(0);
   const ref = useRef(null);
 
