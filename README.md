@@ -12,9 +12,11 @@ Access the current iteration of the site here [IN PROGRESS](https://data-infr-ma
 
 ## Tools used:
 
-- CSS Libaries (Material UI, Bootstrap)
+- CSS Libaries (Material UI, Bootstrap, Tailwindcss)
 - mapbox-gl, mapbox-gl-legend
 - React
+- Node.js
+- MongoDB
 
 ## API calls
 
@@ -24,4 +26,4 @@ Access the current iteration of the site here [IN PROGRESS](https://data-infr-ma
 
 # License
 
-[MIT] (https://choosealicense.com/licenses/mit/)
+[MIT](https://choosealicense.com/licenses/mit/)
