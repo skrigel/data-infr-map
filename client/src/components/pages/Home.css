@@ -36,7 +36,6 @@ p {
 }
 
 .home-Container {
-  /* background: url("../../assets/dnb_united_states_lrg.jpg") no-repeat center center fixed; */
   font-family: "Jersey 15", sans-serif;
   align-items: center;
 
@@ -54,43 +53,111 @@ p {
   font-size: 2em;
 }
 
-@keyframes animate {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-    border-radius: 0;
-  }
-  100% {
-    transform: translateY(-1000px) rotate(720deg);
-    opacity: 0;
-    border-radius: 50%;
-  }
-}
-
-.background {
+.blinking-dots {
   position: fixed;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   top: 0;
   left: 0;
   margin: 0;
   padding: 0;
-  background: #000000;
+  background: url("../../assets/ss_bg.png") no-repeat center;
+
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   overflow: hidden;
 }
-.background li {
+
+/* .background li {
   position: absolute;
   display: block;
   list-style: none;
   width: 20px;
   height: 20px;
   background: rgba(255, 255, 255, 0.2);
-  animation: animate 12s linear infinite;
+  animation: animate 12s infinite;
+} */
+
+/* body {
+  background: linear-gradient(-45deg, #0c0c1d, rgb(69, 39, 69));
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+*/
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
+.blinking-dots li:nth-child(1) {
+  margin-top: 40px !important;
+  margin-left: 100px;
+  width: 120px;
+  bottom: -160px;
+  aspect-ratio: 4;
+  animation: blink 1s steps(4) infinite;
+  background: radial-gradient(circle closest-side, #f72585 90%, #0000) 0 / calc(100% / 3) 100%
+    no-repeat !important;
+  z-index: 3;
+}
+
+.blinking-dots li:nth-child(2) {
+  margin-left: 800px;
+  height: 40%;
+  width: 120px;
+  aspect-ratio: 4;
+  animation: blink 1s steps(4) infinite;
+  background: radial-gradient(circle closest-side, blue 90%, #0000) 0 / calc(100% / 3) 100%
+    no-repeat;
+  z-index: 3;
+}
+
+.blinking-dots li:nth-child(3) {
+  margin-left: 400px;
+  height: 80%;
+  width: 120px;
+  aspect-ratio: 4;
+  animation: blink 1s steps(4) infinite;
+  background: radial-gradient(circle closest-side, orange 90%, #0000) 0 / calc(100% / 3) 100%
+    no-repeat;
+  z-index: 3;
+}
+
+.blinking-dots li:nth-child(4) {
+  margin-left: 70px;
+  height: 80%;
+  width: 120px;
+  aspect-ratio: 4;
+  animation: blink 1s steps(4) infinite;
+  background: radial-gradient(circle closest-side, orange 90%, #0000) 0 / calc(100% / 3) 100%
+    no-repeat;
+  z-index: 3;
+}
+
+.blinking-dots li:nth-child(5) {
+  margin-left: 500px;
+  margin-top: 0;
+  width: 120px;
+  aspect-ratio: 4;
+  animation: blink 1s steps(4) infinite;
+  background: radial-gradient(circle closest-side, pink 90%, #0000) 0 / calc(100% / 3) 100%
+    no-repeat;
+  z-index: 3;
+}
+
+/*
 .background li:nth-child(0) {
-  left: 44%;
-  width: 137px;
+  animation: gradient 4s ease infinite;
+  width: 50px;
+  width: 50px;
   height: 137px;
   bottom: -137px;
   animation-delay: 0s;
@@ -192,4 +259,4 @@ p {
   height: 100px;
   bottom: -100px;
   animation-delay: 19s;
-}
+} */

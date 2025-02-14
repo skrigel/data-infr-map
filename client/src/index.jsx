@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./components/App";
 import Home from "./components/pages/Home";
 import MapPage from "./components/pages/MapPage";
+import ScrollytellingPage from "./components/pages/ScrollyTelling";
 import NotFound from "./components/pages/NotFound";
 import "bootstrap/dist/css/bootstrap.min.css";
 import mapboxgl from "mapbox-gl";
@@ -26,7 +27,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<NotFound />} element={<App />}>
       <Route path="/" element={<Home />} />
-      <Route path="/map" element={<MapPage />} />
+      <Route path="/map" element={<ScrollytellingPage />} />
       <Route path="/profile" element={<Profile />} />
     </Route>
   )

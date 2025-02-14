@@ -277,8 +277,8 @@ const Map = () => {
             source: "netfac",
             layout: {},
             paint: {
-              "fill-color": "#0080ff",
-              "fill-opacity": 0,
+              color: "#0080ff",
+              opacity: 0,
             },
           });
         }
@@ -478,9 +478,7 @@ const Map = () => {
 const MapPage = () => {
   return (
     <div>
-      <NavBar></NavBar>
       <Map></Map>
-      <Footer></Footer>
     </div>
   );
 };

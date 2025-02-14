@@ -9,10 +9,14 @@ import NavBar from "../modules/NavBar";
 const Home = () => {
   return (
     <div className="home-Container">
-      <ul class="background">
+      <ul className="blinking-dots">
         <NavBar></NavBar>
         <div className="home-text">
+          <li></li>
+          <li></li>
           <h1 className="home-header">Data Center Mapping</h1>
+          <li></li>
+          <li></li>
           <h2>Explore data centers in Massachusetts!</h2>
           <hr></hr>
           <div className="u-textCenter">
@@ -20,25 +24,10 @@ const Home = () => {
               Go to map
             </Link>
           </div>
-        </div>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-      </ul>
 
-      <Footer />
+          <Footer />
+        </div>
+      </ul>
     </div>
   );
 };
