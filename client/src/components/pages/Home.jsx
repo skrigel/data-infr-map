@@ -15,19 +15,19 @@ const Home = () => {
           <li></li>
           <li></li>
           <h1 className="home-header">Data Center Mapping</h1>
-          <li></li>
-          <li></li>
-          <h2>Explore data centers in Massachusetts!</h2>
+          <h2 className="mt-20">Explore data centers in Massachusetts!</h2>
           <hr></hr>
           <div className="u-textCenter">
             <Link to="/map" className="u-link">
               Go to map
             </Link>
+            <li></li>
+            <li></li>
+            <li></li>
           </div>
-
-          <Footer />
         </div>
       </ul>
+      <Footer />
     </div>
   );
 };

@@ -22,17 +22,13 @@
   color: white;
   font-size: 4em;
   text-align: center;
-  padding: 10%;
+  margin-bottom: 70px;
+  /* padding: 10%; */
 }
 
 .login-Container {
   margin-left: auto;
   margin-right: 0;
-}
-
-p {
-  color: white;
-  font-size: var(--m_text);
 }
 
 .home-Container {
@@ -99,7 +95,8 @@ p {
 
 .blinking-dots li:nth-child(1) {
   margin-top: 40px !important;
-  margin-left: 100px;
+  margin-bottom: 80px;
+  margin-left: 200px;
   width: 120px;
   bottom: -160px;
   aspect-ratio: 4;
@@ -110,8 +107,9 @@ p {
 }
 
 .blinking-dots li:nth-child(2) {
-  margin-left: 800px;
-  height: 40%;
+  margin-left: 1300px;
+  margin-top: 60px;
+
   width: 120px;
   aspect-ratio: 4;
   animation: blink 1s steps(4) infinite;
@@ -121,8 +119,7 @@ p {
 }
 
 .blinking-dots li:nth-child(3) {
-  margin-left: 400px;
-  height: 80%;
+  margin-left: 200px;
   width: 120px;
   aspect-ratio: 4;
   animation: blink 1s steps(4) infinite;
@@ -132,19 +129,8 @@ p {
 }
 
 .blinking-dots li:nth-child(4) {
-  margin-left: 70px;
-  height: 80%;
-  width: 120px;
-  aspect-ratio: 4;
-  animation: blink 1s steps(4) infinite;
-  background: radial-gradient(circle closest-side, orange 90%, #0000) 0 / calc(100% / 3) 100%
-    no-repeat;
-  z-index: 3;
-}
-
-.blinking-dots li:nth-child(5) {
-  margin-left: 500px;
-  margin-top: 0;
+  margin-top: 40px;
+  margin-left: 1000px;
   width: 120px;
   aspect-ratio: 4;
   animation: blink 1s steps(4) infinite;
