@@ -1,6 +1,7 @@
 .collapsible-content-edonec {
   /* display: flex; */
-  overflow: hidden;
+  height: 100%;
+  overflow: scroll;
   transition: height 0.2s ease-in-out;
   border-bottom: 1px solid #dee2e6 !important;
 }

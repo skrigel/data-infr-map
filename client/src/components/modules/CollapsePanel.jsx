@@ -18,13 +18,17 @@ import {
 import "./CollapsePanel.css";
 import "../../utilities.css";
 
-const CollapsePanel = ({ isOpen, setFunc, networks, handleNetworkSelect, level, setLevel }) => {
+const CollapsePanel = ({ isOpen, setFunc, networks, netPanelOpen, handleNetworkSelect, level, setLevel }) => {
   const [height, setHeight] = useState(0);
   const ref = useRef(null);
 
   const handleLevelClick = (newLevel) => {
     setLevel(newLevel);
   };
+
+  const canOpenNetpanel = () =>{
+    return networks && netPanelOpen;
+  }
 
   // const handleYearSubmit = (inpYear) => {
   //   setYear(inpYear);
@@ -51,7 +55,8 @@ const CollapsePanel = ({ isOpen, setFunc, networks, handleNetworkSelect, level, 
   }, [isOpen]);
 
   return (
-    <>
+    <div>
+
       <div className={"collapsible-card-edonec"}>
         <div>
           <div className={"collapsible-header-edonec"}>
@@ -74,8 +79,8 @@ const CollapsePanel = ({ isOpen, setFunc, networks, handleNetworkSelect, level, 
             <div className={"collapsible-content-padding-edonec-sm"}>
               <MapLegend level={level} setLevel={handleLevelClick}></MapLegend>
             </div>
-            {networks && (
-              <TableContainer className="w-2xl h-100%">
+            {canOpenNetpanel() && (
+              <TableContainer className="w-2xl max-h-50">
                 <TableHead>
                   <TableRow>
                     <TableCell>Network ID</TableCell>
@@ -124,7 +129,7 @@ const CollapsePanel = ({ isOpen, setFunc, networks, handleNetworkSelect, level, 
           </div>
         </div>
       </div>
-    </>
+    </div>
 
     // <>
 

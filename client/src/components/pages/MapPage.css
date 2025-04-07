@@ -4,11 +4,12 @@
 /*Map styles*/
 
 #map-container {
+  width: 100%;
+  border-radius: 10px;
   height: 100%;
-  width: 50%;
-  /* temporarily set the background color so we can tell where the map container is positioned */
-  background-color: lightgrey;
-  color: black;
+  overflow: hidden;
+  background-color: #f2f2f2;
+  position: relative;
 }
 
 .reset-button {

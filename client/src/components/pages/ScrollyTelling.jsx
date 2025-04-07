@@ -87,7 +87,7 @@ export default function ScrollytellingPage() {
             >
               {section.title === "Map Explorer" ? (
                 <motion.div
-                  className="w-3/4 h-2/3 flex items-center justify-center bg-transparent"
+                  className="map-story-wrapper"
                   initial={{ opacity: 0.5 }}
                   animate={{
                     opacity: activeIndex === index ? 1 : 0.5,

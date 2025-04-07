@@ -1,8 +1,4 @@
-/* nav {
-  color: white;
-  background-color: var(--primary);
-  margin: var(--s) var(--m);
-} */
+
 
 .NavBar-container {
   font-family: "Jersey 15", sans-serif;
@@ -42,25 +38,6 @@
   align-items: center;
   gap: 10px; /* Add spacing if needed between items in the container */
 }
-
-/* .NavBar-container {
-  padding: var(--s) var(--m);
-  background-color: var(--primary);
-}
-
-.NavBar-title {
-  color: var(--white);
-  font-size: 20px;
-}
-
-.NavBar-linkContainer {
-  margin-left: var(--l);
-}
-
-.NavBar-loginContainer {
-  padding-left: 40;
-  align-items: center;
-} */
 
 .NavBar-link,
 .NavBar-link:visited {

@@ -23,9 +23,9 @@ const PopupPanel = ({ selPoint, setSelPoint, setDemoPanelOpen }) => {
           <p>Type: {selPoint.type}</p>
         </div>
 
-        <button onClick={() => setDemoPanelOpen(true)} className="view-more-button">
+       {selPoint.net_count>0 && <button onClick={() => setDemoPanelOpen(true)} className="view-more-button">
           Explore Networks
-        </button>
+        </button>}
       </div>
     </div>
   );

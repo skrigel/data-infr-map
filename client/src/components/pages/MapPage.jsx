@@ -47,12 +47,12 @@ const Map = () => {
   const map = useRef(null);
 
   //for updating type of data from census API
-  const [demoType, setDemoType] = useState("education");
+  // const [demoType, setDemoType] = useState("education");
 
-  const [demoPanelOpen, setDemoPanelOpen] = useState(false);
-  const [demoData, setDemoData] = useState(null);
-  const [region, setRegion] = useState(null);
-  const [year, setYear] = useState("2023");
+  // const [demoPanelOpen, setDemoPanelOpen] = useState(false);
+  // const [demoData, setDemoData] = useState(null);
+  // const [region, setRegion] = useState(null);
+  // const [year, setYear] = useState("2023");
 
   //TODO: allow users to go from block-->tract-->county-->state level
   const [level, setLevel] = useState("places");
@@ -60,6 +60,7 @@ const Map = () => {
 
   const [centerData, setCenterData] = useState(null);
   const [isCollOpen, setCollOpen] = useState(true);
+  const [netPanelOpen, setNetPanelOpen] = useState(false)
   const [selPoint, setSelPoint] = useState(null);
   const [networks, setNetworks] = useState([]);
   const [currNetId, setCurrNetId] = useState(null);
@@ -154,6 +155,7 @@ const Map = () => {
     setCurrNetId(null);
     setNetworks(null);
     setNetFacLayer(null);
+    setNetPanelOpen(false);
   }, [selPoint]);
 
   //TODO allow filtering by level i.e. state --> county --> city --> block, etc.
@@ -396,11 +398,13 @@ const Map = () => {
     });
   };
 
+
   return (
     <>
       <CollapsePanel
         isOpen={isCollOpen}
         setFunc={setCollOpen}
+        netPanelOpen={netPanelOpen}
         networks={networks}
         handleNetworkSelect={handleNetworkSelect}
         level={level}
@@ -450,7 +454,7 @@ const Map = () => {
         </TableContainer>
       )} */}
 
-      <div id="map-container" ref={mapContainer} style={{ width: "100%", height: "100vh" }}>
+      <div id="map-container" ref={mapContainer} style={{ width: "100%", height: "80vh" }}>
         <button className="reset-button" onClick={handleResetButtonClick}>
           Reset
         </button>
@@ -466,7 +470,7 @@ const Map = () => {
             <PopupPanel
               selPoint={selPoint}
               setSelPoint={setSelPoint}
-              setDemoPanelOpen={setCollOpen}
+              setDemoPanelOpen={setNetPanelOpen}
             />
           </Container>
         )}

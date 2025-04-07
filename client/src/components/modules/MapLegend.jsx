@@ -40,22 +40,3 @@ const MapLegend = ({ level, setLevel }) => {
 };
 
 export default MapLegend;
-
-// switch (level) {
-//   case "tracts":
-//     return;
-//   // case value2:
-//   //   // code block 2
-//   //   break;
-//   // ...
-//   default:
-//     return (
-//       <>
-//         <button>Click me! I do nothing!!</button>
-//       </>
-//     );
-// code block to be executed if none of the cases match
-// }
-//TODO: buttons displayed row-wise (use flex )
-// button: name
-// button2: namew
