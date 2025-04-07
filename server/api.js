@@ -353,79 +353,40 @@ router.get("/census_block_groups", (req, res) => {
       res.status(500).send({ error: "Failed to fetch county subdivisions" });
     });
 });
-// router.get("/api/census_data", (req, res) => {
-//   const { year, survey, variables, countyFIPS, stateFIPS } = req.query;
-//   const apiKey = process.env.CENSUS_API_KEY;
 
-//   // Validate required parameters
-//   if (!year || !survey || !variables || !countyFIPS || !stateFIPS) {
-//     return res.status(400).json({ error: "Missing one or more required parameters." });
-//   }
 
-//   // Construct the Census API URL
-//   const apiUrl = `https://api.census.gov/data/${year}/${survey}?get=NAME,${variables}&for=county:${countyFIPS}&in=state:${stateFIPS}&key=${apiKey}`;
+router.get("/census_data", (req, res) => {
+  const { year, survey, variables, countyFIPS, stateFIPS } = req.query;
+  const apiKey = process.env.CENSUS_API_KEY;
 
-//   fetch(apiUrl)
-//     .then((response) => response.json()) // Resolve JSON
-//     .then((data) => res.json(data)) // Send the resolved data to the frontend
-//     .catch((error) => {
-//       res.status(500).json({ error: `Failed to fetch data from Census API: ${error.message}` });
-//     });
-// });
+  // Validate required parameters
+  if (!year || !survey || !variables || !countyFIPS || !stateFIPS) {
+    return res.status(400).json({ error: "Missing one or more required parameters." });
+  }
 
-// const queryByCounty = () => {
-//     const matchingObjects = tractData.features.filter((obj) => obj.properties.COUNTY === region);
+  // Construct the Census API URL
+  const apiUrl = `https://api.census.gov/data/${year}/${survey}?get=NAME,${variables}&for=county:${countyFIPS}&in=state:${stateFIPS}&key=${apiKey}`;
+  
+  fetch(apiUrl)
+    .then((response) => response.json()) // Resolve JSON
+    .then((data) => res.json(data)) // Send the resolved data to the frontend
+    .catch((error) => {
+      res.status(500).json({ error: `Failed to fetch data from Census API: ${error.message}` });
+    });
+});
 
-//     const variables = demoTypeToFields[demoType];
-//     const variableNames = variables.join(",");
+router.post("/user", auth.ensureLoggedIn, (req, res) => {
+  console.log(`Received a chat message from ${req.user.name}: ${req.body.content}`);
 
-//     const [stateFIPS, countyFIPS] = craftCensusAPIQuery(matchingObjects[0], variableNames);
+  // insert this message into the database
+  const user = new User({
+    name: req.body.name,
+  });
+  user.save();
+});
 
-//     const params = {
-//       year: year,
-//       survey: survey,
-//       variables: variableNames,
-//       countyFIPS: countyFIPS,
-//       stateFIPS: stateFIPS,
-//     };
-//     // Extract relevant variables for matching objects
-//     get_external(`api/census_data`, params).then((apiData) => {
-//       console.log("api data", apiData);
-//       setDemoData(apiData);
-//       console.log("demo", demoData);
-//     });
 
-// router.post("/user", auth.ensureLoggedIn, (req, res) => {
-//   console.log(`Received a chat message from ${req.user.name}: ${req.body.content}`);
 
-//   // insert this message into the database
-//   const user = new User({
-//     name: req.body.name,
-//   });
-//   user.save();
-// });
-
-// const CENSUS_API_KEY = "YOUR_CENSUS_API_KEY"; // Replace with your Census API key
-
-// Route to fetch census data
-// router.get("/census-data", (req, res) => {
-//   const endpoint = "https://api.census.gov/data/2020/acs/acs5";
-//   const params = {
-//     get: "B01003_001E,NAME",
-//     for: "tract:*",
-//     in: "state:*",
-//     key: process.env.CENSUS_API_KEY, // Use your environment variable for the API key
-//   };
-
-//   get(endpoint, params)
-//     .then((data) => {
-//       res.send(data); // Send the fetched data to the client
-//     })
-//     .catch((error) => {
-//       console.error("Error fetching Census data:", error);
-//       res.status(500).json({ error: "Failed to fetch Census data" }); // Send an error response
-//     });
-// });
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {

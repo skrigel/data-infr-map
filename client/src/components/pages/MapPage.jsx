@@ -15,6 +15,7 @@ import {
   Link,
   IconButton,
 } from "@mui/material";
+import "../modules/CollapsePanel.css"
 // import CensusDataTable from "../modules/CensusDataTable";
 import React, { Component, useRef, useEffect, useState } from "react";
 import CollapsePanel from "../modules/CollapsePanel";
@@ -22,7 +23,7 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 // import FillBox from "../modules/fillBox";
 import { get, post, get_external } from "../../utilities";
-
+import CensusDataTable from "../modules/CensusDataTable";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import PopupPanel from "../modules/PopupPanel";
@@ -37,9 +38,131 @@ const MAP_BOUNDS = new mapboxgl.LngLatBounds(
   new mapboxgl.LngLat(-70.2739, 42.9)
 );
 
+const demoTypeToFields = {
+  sex_citizenship: [
+    "B05003_001E",
+    "B05003_002E",
+    "B05003_013E",
+    "B05002_026E",
+    "B16008_020E",
+    "B05007_027E",
+    "B05007_014E",
+    "B05007_040E",
+    "B05007_094E",
+  ],
+  family_households: [
+    "B05009_002E",
+    "B05009_020E",
+    "B05003_014E",
+    "B05003_003E",
+    "B05010_019E",
+    "B05010_023E",
+    "B07008_002E",
+    "B07008_003E",
+    "B07008_004E",
+    "B11001_002E",
+    "B11001_007E",
+    "B11001_008E",
+  ],
+  income_poverty: [
+    "B06010_003E",
+    "B06010_002E",
+    "B19013_001E",
+    "B06010_004E",
+    "B06010_005E",
+    "B06010_006E",
+    "B06010_007E",
+    "B06010_009E",
+    "B06010_010E",
+    "B06010_011E",
+    "B19001_014E",
+    "B19001_015E",
+    "B19001_016E",
+    "B19001_017E",
+    "B17001_003E",
+    "B17001_017E",
+  ],
+  education: [
+    "B15002_010E",
+    "B15002_011E",
+    "B15002_014E",
+    "B15002_015E",
+    "B15002_016E",
+    "B15002_018E",
+    "B15002_028E",
+    "B15002_028E",
+    "B15002_031E",
+    "B15002_032E",
+    "B15002_033E",
+    "B15002_035E",
+    "B15012_009E",
+    "B15012_010E",
+    "B15012_012E",
+    "B15012_013E",
+    "B15012_014E",
+    "B14003_031E",
+    "B14003_040E",
+    "B14003_003E",
+    "B14003_012E",
+  ],
+  computer_internet: [
+    "B28001_002E",
+    "B28001_005E",
+    "B28003_002E",
+    "B28001_003E",
+    "B28001_011E",
+    "B28002_002E",
+    "B28002_005E",
+    "B28002_005E",
+    "B28002_013E",
+    "B28002_013E",
+    "B28002_009E",
+  ],
+  labor: [
+    "B23025_002E",
+    "B23025_004E",
+    "B23025_005E",
+    "B23025_007E",
+    "B20005_050E",
+    "B20005_003E",
+    "B23022_004E",
+    "B23022_028E",
+    "B20005_050E",
+    "B20005_003E",
+    "B08526_002E",
+    "B08526_003E",
+    "B08526_004E",
+    "B08526_006E",
+    "B08526_007E",
+    "B08526_008E",
+    "B08526_009E",
+    "B08526_010E",
+    "B08526_011E",
+    "B08526_012E",
+    "B08526_014E",
+  ],
+};
+const demoTypes = [
+  "sex_citizenship",
+  "income_poverty",
+  "education",
+  "computer_internet",
+  "family_households",
+  "labor",
+];
+
+
+// const year = "2023";
+const survey = "acs/acs5";
+
+
+
 //Please ignore that I put this here and not in .env --> I'm sorry
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic2tyaWdlbCIsImEiOiJjbTVzdnNkZnQwcmd1Mmxwd2Q4czcxN2h3In0.eEbeS03iSXZwe-_3bzi8Vg";
+
+const CENSUS_API_KEY="af2cf73162a5d8a466c8918ebfc397716c84093c"
+
 
 const Map = () => {
   const mapContainer = useRef(null);
@@ -47,12 +170,12 @@ const Map = () => {
   const map = useRef(null);
 
   //for updating type of data from census API
-  // const [demoType, setDemoType] = useState("education");
+  const [demoType, setDemoType] = useState("education");
 
-  // const [demoPanelOpen, setDemoPanelOpen] = useState(false);
-  // const [demoData, setDemoData] = useState(null);
-  // const [region, setRegion] = useState(null);
-  // const [year, setYear] = useState("2023");
+  const [demoPanelOpen, setDemoPanelOpen] = useState(false);
+  const [demoData, setDemoData] = useState(null);
+  const [year, setYear] = useState("2023");
+  const [county, setCounty] = useState(null);
 
   //TODO: allow users to go from block-->tract-->county-->state level
   const [level, setLevel] = useState("places");
@@ -66,16 +189,67 @@ const Map = () => {
   const [currNetId, setCurrNetId] = useState(null);
   const [netFacLayer, setNetFacLayer] = useState([]);
 
-  // useEffect(() => {
 
-  //   const extractNetworksbyFac = () => {
-  //     if (selPoint && currNet) {
-  //       get(`/api/networks`, {net_id: currNet.net_id}).then((netObj) => setCurrNet(netObj));
-  //     }
 
-  //   };
+const handleCloseDemoPanel = () => {
+  setDemoPanelOpen(false);
+};
 
-  // }, [currNet])
+  useEffect(() => {
+  if (county && !demoPanelOpen) {
+    // setCounty(selPoint.county);
+    setDemoPanelOpen(true);
+  }
+
+}, [county]);
+
+useEffect(() => {
+  if (demoPanelOpen && levelData && county) {
+    console.log('lvel', levelData)
+    queryByCounty();
+    console.log(demoTypeToFields);
+    console.log(year);
+  }
+}, [demoPanelOpen, demoType, year, county]);
+
+
+const queryByCounty = () => {
+
+  const variables = demoTypeToFields[demoType];
+  const variableNames = variables.join(",");
+  const stateFIPS = county.substring(0, 2);
+  const countyFIPS = county.substring(2, 5);
+
+  const params = {
+    year: year,
+    survey: survey,
+    variables: variableNames,
+    countyFIPS: countyFIPS,
+    stateFIPS: stateFIPS,
+  };
+  // Extract relevant variables for matching objects
+  console.log(demoData)
+  get(`api/census_data`, params).then((apiData) => {
+    console.log("api data", apiData);
+    setDemoData(apiData);
+    console.log("demo", demoData);
+  });
+}
+
+// const queryByCounty = () => {
+//   const matchingObjects = selPoint.features.filter((obj) => obj.properties.COUNTY === county);
+
+//   const variableNames = demoTypeToFields[demoType];
+
+//   let censusURL = craftCensusAPIQuery(matchingObjects[0], variableNames);
+
+//   // Extract relevant variables for matching objects
+//   get_external(censusURL).then((apiData) => {
+//     console.log("api data", apiData);
+//     setDemoData(apiData);
+//     console.log("demo", demoData);
+//   });
+// }
 
   //extracts networks objects for the selected facility
   useEffect(() => {
@@ -325,6 +499,9 @@ const Map = () => {
         // const coordinates = e.features[0].geometry.coordinates;
         const coordinates = e.features[0].geometry.coordinates;
         // console.log(coordinates[0]);
+        const currCounty = e.features[0].properties.GEOID;
+        setCounty(currCounty);
+        console.log('county', currCounty)
         // const testCoords = new mapboxgl.LngLat(coordinates[0]);
         let latitudes = [];
         let longitudes = [];
@@ -411,48 +588,37 @@ const Map = () => {
         setLevel={setLevel}
       ></CollapsePanel>
 
-      {/* {networks && (
-        <TableContainer className="w-2xl h-100%">
-          <TableHead>
-            <TableRow>
-              <TableCell>Network ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Network Traffic</TableCell>
-              <TableCell>Website</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {networks.map((network) => (
-              <TableRow
-                key={network.net_id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {network.net_id}
-                </TableCell>
-                <TableCell align="right">{network.name}</TableCell>
-                <TableCell align="right">
-                  {network.info_traffic ? network.info_traffic : "N/A"}
-                </TableCell>
-                <TableCell align="right">
-                  <Button>
-                    <a href={network.org_website} target="_blank">
-                      Website
-                    </a>
-                  </Button>
+      {/* <Container>
+      {demoPanelOpen && (
+          <div className="sidebar-bottom">
+            <button onClick={handleCloseDemoPanel} className="close-button">
+              Close
+            </button>
+            <h3>Demographic Data: {county}</h3>
+            <div className="sidebar-buttons">
+              <div style={{ maxHeight: "300px", overflow: "scroll" }}>
+                {demoTypes.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setDemoType(type)}
+                    style={{ backgroundColor: demoType === type ? "#444" : "#555", fontSize: 14 }}
+                  >
+                    {type.replace("_", " AND ").toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-                </TableCell>
-                <TableCell align="right">
-                  <Button onClick={() => handleNetworkSelect(network.net_id)}>
-                    Connect Facilities
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </TableContainer>
-      )} */}
+            <div>
+              <CensusDataTable censusData={demoData}></CensusDataTable>
+            </div>
+          </div>
+        )} 
+
+      </Container> */}
+      
+
+     
 
       <div id="map-container" ref={mapContainer} style={{ width: "100%", height: "80vh" }}>
         <button className="reset-button" onClick={handleResetButtonClick}>

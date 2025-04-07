@@ -1,34 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import MapPage from "./MapPage";
+// import MapPage from "./MapPage";
 import NavBar from "../modules/NavBar";
 import Footer from "../modules/Footer";
+import Intro from "../slides/Intro";
+import Stats from "../slides/Stats";
+import MapSlide from "../slides/MapSlide";
+import RegionLookup from "../slides/RegionLookup";
+import CallToAction from "../slides/CallToAction";
 
-const sections = [
-  {
-    id: 1,
-    title: "Introduction",
-    content: "Welcome!",
-    divContent: "Come along as we explore data centers in Massachusetts!",
-  },
-  {
-    id: 2,
-    title: "Map Explorer",
-    content: "As you scroll, the story builds up...",
-    divContent: "",
-  },
-  {
-    id: 3,
-    title: "Climax",
-    content: "The most exciting part happens here!",
-    divContent: "To Fill",
-  },
-  {
-    id: 4,
-    title: "Conclusion",
-    content: "The story wraps up as you reach the end.",
-    divContent: "To Fill",
-  },
+
+const slides = [
+  { id: 1, title: "Introduction", component: <Intro />, content: "Welcome to the story" },
+  { id: 2, title: "National Stats", component: <Stats />, content: "Overview of US infrastructure" },
+  { id: 3, title: "Map Explorer", component: <MapSlide />, content: "Explore the map of Massachusetts" },
+  { id: 4, title: "Region Lookup", component: <RegionLookup />, content: "Search local data" },
+  { id: 5, title: "Call to Action", component: <CallToAction />, content: "Find resources and next steps" },
 ];
 
 export default function ScrollytellingPage() {
@@ -36,8 +23,7 @@ export default function ScrollytellingPage() {
   const sectionRefs = useRef([]);
 
   useEffect(() => {
-    const observerOptions = { threshold: 0.5 }; // Trigger when 50% of a section is visible
-
+    const observerOptions = { threshold: 0.5 };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -46,8 +32,6 @@ export default function ScrollytellingPage() {
         }
       });
     }, observerOptions);
-
-    <MapPage></MapPage>;
 
     sectionRefs.current.forEach((section) => {
       if (section) observer.observe(section);
@@ -58,63 +42,54 @@ export default function ScrollytellingPage() {
 
   return (
     <div>
-      <NavBar></NavBar>
+      <NavBar className='fixed mt-0'/>
       <div className="flex">
         {/* Sticky Sidebar (Text) */}
         <div className="w-1/4 h-screen sticky top-0 flex flex-col justify-center p-8 bg-gray-100">
-          {sections.map((section, index) => (
+          {slides.map((slide, index) => (
             <motion.div
-              key={section.id}
+              key={slide.id}
               className={`mb-6 p-4 rounded-lg transition-opacity ${
                 activeIndex === index ? "bg-blue-500 text-white" : "bg-white text-black"
               }`}
               initial={{ opacity: 0.3 }}
               animate={{ opacity: activeIndex === index ? 1 : 0.3 }}
             >
-              <h2 className="text-xl font-bold">{section.title}</h2>
-              <p>{section.content}</p>
+              <h2 className="text-xl font-bold">{slide.title}</h2>
+              <p>{slide.content}</p>
             </motion.div>
           ))}
         </div>
 
-        {/* Scrolling Visuals */}
+        {/* Scrolling Slides */}
         <div className="w-3/4">
-          {sections.map((section, index) => (
-            <div
-              key={section.id}
-              ref={(el) => (sectionRefs.current[index] = el)}
-              className="h-screen flex justify-center items-center text-center"
-            >
-              {section.title === "Map Explorer" ? (
-                <motion.div
-                  className="map-story-wrapper"
-                  initial={{ opacity: 0.5 }}
-                  animate={{
-                    opacity: activeIndex === index ? 1 : 0.5,
-                  }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {" "}
-                  <MapPage></MapPage>
-                </motion.div>
-              ) : (
-                <motion.div
-                  className="w-3/4 h-2/3 flex items-center justify-center bg-blue-300 rounded-lg shadow-lg"
-                  initial={{ opacity: 0.5, scale: 0.8 }}
-                  animate={{
-                    opacity: activeIndex === index ? 1 : 0.5,
-                    scale: activeIndex === index ? 1 : 0.8,
-                  }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <h1 className="text-4xl font-bold">{section.divContent}</h1>
-                </motion.div>
-              )}
-            </div>
-          ))}
+        {[
+  <Intro key="intro" />,
+  <Stats key="stats" />,
+  <MapSlide key="map" />,
+  <RegionLookup/>,
+  <CallToAction/>
+].map((component, index) => (
+  <div
+    key={index}
+    ref={(el) => (sectionRefs.current[index] = el)}
+    className="flex justify-center items-center px-4"
+  >
+    <motion.div
+      className="w-full max-w-5xl mx-auto"
+      initial={{ opacity: 0.5 }}
+      animate={{
+        opacity: activeIndex === index ? 1 : 0.5,
+      }}
+      transition={{ duration: 0.5 }}
+    >
+      {component}
+    </motion.div>
+  </div>
+))}
         </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 }

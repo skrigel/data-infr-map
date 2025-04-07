@@ -18,3 +18,18 @@
   .mapboxgl-canvas {
     border-radius: 10px;
   }
+
+.slide-wrapper {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.slide-wrapper > * {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+}

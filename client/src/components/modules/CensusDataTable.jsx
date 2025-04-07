@@ -1,4 +1,18 @@
 import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Box,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Container,
+  Link,
+  Paper,
+  IconButton,
+} from "@mui/material";
 
 const variableNames = {
   B05003_001E: "Total Population",
@@ -108,41 +122,66 @@ const CensusDataTable = ({ censusData }) => {
   }
 
   // Assuming the first item contains the keys for headers
-  const rows = censusData[0].map((header, index) => ({
+  const rows = censusData[0].filter((header, index) =>  variableNames[header]!==undefined).map((header, index) => ({
     index,
-    name: header,
+    name: variableNames[header],
     value: censusData[1][index], // Access value from the second subarray
   }));
 
   return (
-    <div style={{ maxHeight: "300px", overflow: "scroll" }}>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid black", backgroundColor: "#f2f2f2", color: "black" }}>
-              Index
-            </th>
-            <th style={{ border: "1px solid black", backgroundColor: "#f2f2f2", color: "black" }}>
-              Name
-            </th>
-            <th style={{ border: "1px solid black", backgroundColor: "#f2f2f2", color: "black" }}>
-              Value
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.index}>
-              <td style={{ border: "1px solid black" }}>{row.index}</td>
-              <td style={{ border: "1px solid black" }}>
-                {row.name in variableNames ? variableNames[row.name] : row.name}
-              </td>
-              <td style={{ border: "1px solid black" }}>{row.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+
+    <TableContainer className="w-2xl max-h-50">
+    <TableHead>
+      <TableRow>
+        <TableCell>Index</TableCell>
+        <TableCell>Name</TableCell>
+        <TableCell>Value</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {rows.map((row) => (
+        <TableRow
+          key={row.index}
+    
+        >
+          <TableCell component="th" scope="row">
+            {row.index}
+          </TableCell>
+          <TableCell>{row.name}</TableCell>
+          <TableCell>{row.value}
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </TableContainer>
+    // <div style={{ maxHeight: "300px", overflow: "scroll" }}>
+    //   <table style={{ borderCollapse: "collapse", width: "100%" }}>
+    //     <thead>
+    //       <tr>
+    //         <th style={{ border: "1px solid black", backgroundColor: "#f2f2f2", color: "black" }}>
+    //           Index
+    //         </th>
+    //         <th style={{ border: "1px solid black", backgroundColor: "#f2f2f2", color: "black" }}>
+    //           Name
+    //         </th>
+    //         <th style={{ border: "1px solid black", backgroundColor: "#f2f2f2", color: "black" }}>
+    //           Value
+    //         </th>
+    //       </tr>
+    //     </thead>
+    //     <tbody>
+    //       {rows.map((row) => (
+    //         <tr key={row.index}>
+    //           <td style={{ border: "1px solid black" }}>{row.index}</td>
+    //           <td style={{ border: "1px solid black" }}>
+    //             {row.name in variableNames ? variableNames[row.name] : row.name}
+    //           </td>
+    //           <td style={{ border: "1px solid black" }}>{row.value}</td>
+    //         </tr>
+    //       ))}
+    //     </tbody>
+    //   </table>
+    // </div>
   );
 };
 
