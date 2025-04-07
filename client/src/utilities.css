@@ -21,8 +21,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Jersey+15&display=swap");
 
 :root {
-  --primary: #6926d7;
-  --primary--dim: #6987db;
+  --primary: #007bff;
+  --primary--dim: #0056b3; /* darker for hover state */
+  /* --primary--dim: #6987db; */
   --darkgrey: #d4d4d4;
   --medgrey: #e0e0e0;
   --grey: #f7f7f7;

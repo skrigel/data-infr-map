@@ -10,7 +10,7 @@
   justify-content: flex-start; /* Align items to the left */
   align-items: center; /* Vertically align items */
   padding: var(--s) var(--m);
-  background-color: var(--primary--dim);
+  background-color: var(--primary);
 }
 
 .NavBar-title {
