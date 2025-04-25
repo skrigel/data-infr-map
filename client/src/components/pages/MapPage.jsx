@@ -15,7 +15,6 @@ import {
   Link,
   IconButton,
 } from "@mui/material";
-import "../modules/CollapsePanel.css"
 // import CensusDataTable from "../modules/CensusDataTable";
 import React, { Component, useRef, useEffect, useState } from "react";
 import CollapsePanel from "../modules/CollapsePanel";
@@ -151,7 +150,6 @@ const demoTypes = [
   "labor",
 ];
 
-
 // const year = "2023";
 const survey = "acs/acs5";
 
@@ -161,7 +159,6 @@ const survey = "acs/acs5";
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic2tyaWdlbCIsImEiOiJjbTVzdnNkZnQwcmd1Mmxwd2Q4czcxN2h3In0.eEbeS03iSXZwe-_3bzi8Vg";
 
-const CENSUS_API_KEY="af2cf73162a5d8a466c8918ebfc397716c84093c"
 
 
 const Map = () => {
@@ -169,12 +166,12 @@ const Map = () => {
   // const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }));
   const map = useRef(null);
 
-  //for updating type of data from census API
-  const [demoType, setDemoType] = useState("education");
+  // //for updating type of data from census API
+  // const [demoType, setDemoType] = useState("education");
 
-  const [demoPanelOpen, setDemoPanelOpen] = useState(false);
-  const [demoData, setDemoData] = useState(null);
-  const [year, setYear] = useState("2023");
+  // const [demoPanelOpen, setDemoPanelOpen] = useState(false);
+  // const [demoData, setDemoData] = useState(null);
+  // const [year, setYear] = useState("2023");
   const [county, setCounty] = useState(null);
 
   //TODO: allow users to go from block-->tract-->county-->state level
@@ -190,147 +187,7 @@ const Map = () => {
   const [netFacLayer, setNetFacLayer] = useState([]);
 
 
-
-const handleCloseDemoPanel = () => {
-  setDemoPanelOpen(false);
-};
-
-  useEffect(() => {
-  if (county && !demoPanelOpen) {
-    // setCounty(selPoint.county);
-    setDemoPanelOpen(true);
-  }
-
-}, [county]);
-
-useEffect(() => {
-  if (demoPanelOpen && levelData && county) {
-    console.log('lvel', levelData)
-    queryByCounty();
-    console.log(demoTypeToFields);
-    console.log(year);
-  }
-}, [demoPanelOpen, demoType, year, county]);
-
-
-const queryByCounty = () => {
-
-  const variables = demoTypeToFields[demoType];
-  const variableNames = variables.join(",");
-  const stateFIPS = county.substring(0, 2);
-  const countyFIPS = county.substring(2, 5);
-
-  const params = {
-    year: year,
-    survey: survey,
-    variables: variableNames,
-    countyFIPS: countyFIPS,
-    stateFIPS: stateFIPS,
-  };
-  // Extract relevant variables for matching objects
-  console.log(demoData)
-  get(`api/census_data`, params).then((apiData) => {
-    console.log("api data", apiData);
-    setDemoData(apiData);
-    console.log("demo", demoData);
-  });
-}
-
-// const queryByCounty = () => {
-//   const matchingObjects = selPoint.features.filter((obj) => obj.properties.COUNTY === county);
-
-//   const variableNames = demoTypeToFields[demoType];
-
-//   let censusURL = craftCensusAPIQuery(matchingObjects[0], variableNames);
-
-//   // Extract relevant variables for matching objects
-//   get_external(censusURL).then((apiData) => {
-//     console.log("api data", apiData);
-//     setDemoData(apiData);
-//     console.log("demo", demoData);
-//   });
-// }
-
-  //extracts networks objects for the selected facility
-  useEffect(() => {
-    const fetchNetworks = async () => {
-      if (selPoint) {
-        const networkIds = selPoint.networks || [];
-
-        if (networkIds.length > 0) {
-          try {
-            // Fetch all networks first
-            const allNetworks = await get(`/api/networks`);
-
-            // Filter networks to match only the selected point's network IDs
-            const networkData = allNetworks.filter((network) =>
-              networkIds.includes(network.net_id)
-            );
-            console.log("Filtered Networks:", networkData);
-            if (networkData) {
-              setNetworks(networkData);
-            }
-          } catch (error) {
-            console.error("Error fetching networks:", error);
-          }
-        }
-      }
-    };
-
-    fetchNetworks();
-  }, [selPoint]);
-
-  //handle Net selection:
-
-  const handleNetworkSelect = (network_id) => {
-    const selectedFacilities = centerData.features.filter((facility) => {
-      return facility.properties.networks.includes(network_id);
-    });
-
-    const lineFeatures = selectedFacilities
-      .map((facility, index, filteredFacilities) => {
-        if (index === 0) return null; // Skip the first facility since it has no previous facility to connect to
-
-        return {
-          type: "Feature",
-          geometry: {
-            type: "LineString",
-            coordinates: [
-              filteredFacilities[index - 1].geometry.coordinates,
-              facility.geometry.coordinates,
-            ],
-          },
-          properties: { net_id: network_id },
-        };
-      })
-      .filter(Boolean); // Remove null values from the array
-
-    // Create a new layer for the lines
-    const lineLayer = {
-      type: "FeatureCollection",
-      features: lineFeatures,
-    };
-
-    console.log("lineLayer", lineLayer);
-
-    // Update the state with the new layer
-    setNetFacLayer(lineLayer);
-  };
-
-  //on selection of network, find facilities to connect
-  //first, find the ids
-  useEffect(() => {
-    if (currNetId && centerData) {
-      handleNetworkSelect(currNetId);
-    }
-  }, [currNetId]);
-
-  useEffect(() => {
-    setCurrNetId(null);
-    setNetworks(null);
-    setNetFacLayer(null);
-    setNetPanelOpen(false);
-  }, [selPoint]);
+  
 
   //TODO allow filtering by level i.e. state --> county --> city --> block, etc.
 
@@ -405,6 +262,8 @@ const queryByCounty = () => {
 
     map.current.on("load", () => {
       // console.log(levelData["features"][0]);
+
+      setSelPoint(null)
       if (centerData && levelData) {
         addFacilitiesLayer(map.current, centerData);
         // map.current.addSource("points", {
@@ -491,7 +350,11 @@ const queryByCounty = () => {
         });
         console.log("right before setting", e.features[0].properties);
         e.features[0].properties.networks = JSON.parse(e.features[0].properties.networks);
+
         setSelPoint(e.features[0].properties);
+
+        setNetFacLayer(null)
+      
       });
 
       map.current.on("click", "geosection_fill", (e) => {
@@ -501,7 +364,6 @@ const queryByCounty = () => {
         // console.log(coordinates[0]);
         const currCounty = e.features[0].properties.GEOID;
         setCounty(currCounty);
-        console.log('county', currCounty)
         // const testCoords = new mapboxgl.LngLat(coordinates[0]);
         let latitudes = [];
         let longitudes = [];
@@ -576,6 +438,88 @@ const queryByCounty = () => {
   };
 
 
+  //extracts networks objects for the selected facility
+  useEffect(() => {
+    const fetchNetworks = async () => {
+      if (selPoint) {
+        const networkIds = selPoint.networks || [];
+
+        if (networkIds.length > 0) {
+          try {
+            // Fetch all networks first
+            const allNetworks = await get(`/api/networks`);
+
+            // Filter networks to match only the selected point's network IDs
+            const networkData = allNetworks.filter((network) =>
+              networkIds.includes(network.net_id)
+            );
+            console.log("Filtered Networks:", networkData);
+            if (networkData) {
+              setNetworks(networkData);
+            }
+          } catch (error) {
+            console.error("Error fetching networks:", error);
+          }
+        }
+      }
+    };
+
+    fetchNetworks();
+  }, [selPoint]);
+
+  //handle Net selection:
+
+  const handleNetworkSelect = (network_id) => {
+    const selectedFacilities = centerData.features.filter((facility) => {
+      return facility.properties.networks.includes(network_id);
+    });
+
+    const lineFeatures = selectedFacilities
+      .map((facility, index, filteredFacilities) => {
+        if (index === 0) return null; // Skip the first facility since it has no previous facility to connect to
+
+        return {
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [
+              filteredFacilities[index - 1].geometry.coordinates,
+              facility.geometry.coordinates,
+            ],
+          },
+          properties: { net_id: network_id },
+        };
+      })
+      .filter(Boolean); // Remove null values from the array
+
+    // Create a new layer for the lines
+    const lineLayer = {
+      type: "FeatureCollection",
+      features: lineFeatures,
+    };
+
+    console.log("lineLayer", lineLayer);
+
+    // Update the state with the new layer
+    setNetFacLayer(lineLayer);
+
+  };
+
+  //on selection of network, find facilities to connect
+  //first, find the ids
+  useEffect(() => {
+    if (currNetId && centerData) {
+      handleNetworkSelect(currNetId);
+    }
+  }, [currNetId]);
+
+  useEffect(() => {
+   
+      setNetPanelOpen(false);
+
+  }, [selPoint]);
+
+
   return (
     <>
       <CollapsePanel
@@ -588,35 +532,6 @@ const queryByCounty = () => {
         setLevel={setLevel}
       ></CollapsePanel>
 
-      {/* <Container>
-      {demoPanelOpen && (
-          <div className="sidebar-bottom">
-            <button onClick={handleCloseDemoPanel} className="close-button">
-              Close
-            </button>
-            <h3>Demographic Data: {county}</h3>
-            <div className="sidebar-buttons">
-              <div style={{ maxHeight: "300px", overflow: "scroll" }}>
-                {demoTypes.map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => setDemoType(type)}
-                    style={{ backgroundColor: demoType === type ? "#444" : "#555", fontSize: 14 }}
-                  >
-                    {type.replace("_", " AND ").toUpperCase()}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <CensusDataTable censusData={demoData}></CensusDataTable>
-            </div>
-          </div>
-        )} 
-
-      </Container> */}
-      
 
      
 
@@ -631,7 +546,7 @@ const queryByCounty = () => {
 
         {/* <div className="panel-container"> */}
 
-        {selPoint && (
+        {(selPoint)&&(
           <Container>
             <PopupPanel
               selPoint={selPoint}
