@@ -221,7 +221,8 @@ const RegionLookup = () => {
       initial={{ opacity: 0, x: 50 }}
       whileInView={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8 }}
-      className="text-black text-center flex flex-col justify-center items-center px-8 py-48 min-h-screen"
+      // className="text-black text-center flex flex-col justify-center items-center px-8 py-48 min-h-screen"
+        className="text-black text-center flex flex-col justify-center items-center px-8 py-20 min-h-screen overflow-hidden"
     >
       <div className="max-w-6xl w-full">
         <h2 className="text-4xl font-semibold mb-8">What’s Happening In Your Town?</h2>
@@ -252,11 +253,43 @@ const RegionLookup = () => {
 
         {data && stateData && (
           <>
-            <div className="mt-10">
+          <div className="flex flex-col lg:flex-row w-full gap-8 mt-10 max-h-[600px] overflow-y-auto p-4 bg-white rounded shadow">
+  {/* Chart Side */}
+  <div className="w-full lg:w-1/2">
+    <Bar data={createChartData()} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
+  </div>
+
+  {/* Table Side */}
+  <div className="w-full lg:w-1/2 overflow-x-auto">
+    <table className="w-full table-auto border-collapse">
+      <thead>
+        <tr>
+          <th className="border p-2">Category</th>
+          <th className="border p-2">ZIP Code ({region})</th>
+          <th className="border p-2">State Average</th>
+        </tr>
+      </thead>
+      <tbody>
+        {fields.filter(f => f.code !== "B01003_001E").map((field) => (
+          <tr key={field.code}>
+            <td className="border p-2">{field.label}</td>
+            <td className="border p-2">
+              {data && data[field.code] ? `${((parseInt(data[field.code], 10) / (parseInt(data["B01003_001E"], 10) || 1)) * 100).toFixed(2)}%` : "N/A"}
+            </td>
+            <td className="border p-2">
+              {stateData && stateData[field.code] ? `${((parseInt(stateData[field.code], 10) / (parseInt(stateData["B01003_001E"], 10) || 1)) * 100).toFixed(2)}%` : "N/A"}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+            {/* <div className="mt-10">
               <Bar data={createChartData()} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
             </div>
 
-            <table className="w-full mt-10 table-auto border-collapse">
+            <table className="w-full mt-10 table-auto border-collapse overflow-y-scroll">
               <thead>
                 <tr>
                   <th className="border p-2">Category</th>
@@ -277,11 +310,13 @@ const RegionLookup = () => {
     </tr>
   ))}
 </tbody>
-            </table>
+            </table> */}
           </>
         )}
-      </div>
-    </motion.section>
+
+          
+        </div>
+         </motion.section>
   );
 }; 
 
