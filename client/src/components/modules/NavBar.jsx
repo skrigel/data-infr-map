@@ -32,27 +32,27 @@ const Login = () => {
 };
 
 const NavBar = () => {
-  const { userId, handleLogin, handleLogout } = useContext(UserContext);
+  // const { userId, handleLogin, handleLogout } = useContext(UserContext);
 
   return (
     <>
       <nav className="NavBar-container">
-        <div className="NavBar-title u-inlineBlock">DC MAPPER</div>
+        <div className="NavBar-title u-inlineBlock text-4xl">DC MAPPER</div>
 
-        <div className="NavBar-linkContainer u-text-Center">
+        <div className="NavBar-linkContainer u-text-Center text-2xl">
           <Link to="/" className="NavBar-link">
             Home
           </Link>
           <Link to="/map" className="NavBar-link">
             Map
           </Link>
-          {userId && (
+          {/* {userId && (
             <Link to={`/profile`} className="NavBar-link u-inlineBlock">
               Profile
             </Link>
-          )}
+          )} */}
         </div>
-        <Login className="NavBar-loginContainer"></Login>
+        {/* <Login className="NavBar-loginContainer"></Login> */}
       </nav>
     </>
   );
@@ -60,12 +60,3 @@ const NavBar = () => {
 
 export default NavBar;
 
-// const NavBar = () => {
-//   return (
-//     <nav className="Header-container">
-//       <div className="Header-title">Welcome!</div>
-//     </nav>
-//   );
-// };
-
-// export default NavBar;

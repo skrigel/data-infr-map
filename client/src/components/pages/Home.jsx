@@ -12,8 +12,8 @@ const Home = () => {
       <NavBar />
       <div className="home-content gap-y-20">
         <div className>
-        <h1 className="home-title">Data Center Mapping</h1>
-        <h2 className="home-subtitle">Explore data centers in Massachusetts!</h2>
+        <h1 className="home-title">Digital Equity Mapping</h1>
+        <h2 className="home-subtitle">Explore Digital Infrastructure in Massachusetts!</h2>
         <hr className="home-divider" />
         </div>
         <div className>
