@@ -8,7 +8,7 @@ Mapping internet infrastructure across Massachusetts to uncover trends in ecolog
 
 ## Demo Link:
 
-Access the current iteration of the site here [IN PROGRESS](https://data-infr-map.onrender.com/map)
+Access the current iteration of the site here: https://data-infr-map.onrender.com/map
 
 ## Tools used:
 
